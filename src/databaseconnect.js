@@ -15,5 +15,4 @@
 	exports.addToDB = addToDB;
 	exports.getByID = getByID;
 
-
 }());
