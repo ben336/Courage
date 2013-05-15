@@ -1,6 +1,20 @@
 var passport = require("passport"), 
   GoogleStrategy = require("passport-google").Strategy,
-  db = require("./databaseconnect");
+  db = require("./databaseconnect"),
+  dbsettings= require("../config/dbsettings");
+
+var dbconfig = dbsettings.config;
+
+
+
+//temporary error handling till I make it a system component
+function handleError (err){
+  console.warn(err);
+}
+
+db.initializeDB(dbconfig,function(result){
+  handleError(result);
+});
 
 
 // Passport session setup.
@@ -15,8 +29,14 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  var user = db.getByID(id);
-  done(null, user);
+  db.getUserByID(id,function(success,result) {
+    if(success) {
+      done(null,result);
+    }
+    else {
+      handleError(result);
+    }
+  });
 });
 
 
@@ -37,9 +57,25 @@ passport.use(new GoogleStrategy({
       // want to associate the Google account with a user record in your 
       // database, and return that user instead.
       profile.id = id;
-      console.log(db);
-      var user = db.getByID(id) || db.addToDB(profile);
-      return done(null, user);
+      db.getUserByID(id, function(success,result) {
+        if (success && result) {
+          done(null,result);
+        }
+        else if (result && result.error) { 
+          handleError(result);
+        }
+        else {
+          db.addUserToDB(profile,function(success,result){
+            if(success){
+              done(null,result);
+            }
+            else {
+              //error handling here
+              handleError(result);
+            }
+          });
+        }
+      });
     });
   }
 ));

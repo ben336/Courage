@@ -32,7 +32,9 @@ module.exports = function(grunt) {
         globals:{
           describe:false,
           it:false,
-          expect:false
+          expect:false,
+          runs:false,
+          waitsFor:false
         }
       },
       uses_defaults: ["dir1/**/*.js", "dir2/**/*.js"],

@@ -1,10 +1,17 @@
 {
-	"folders":
-	[
-		{
-			"follow_symlinks": true,
-			"path": "/Users/ben/Code/Projects/Courage"
-		}
-	],
-	"rulers":[80]
+    "folders":
+    [
+        {
+            "follow_symlinks": true,
+            "path": "/Users/ben/Code/Projects/Courage",
+            "file_exclude_patterns": ["node_modules/"]
+        }
+    ],
+    "settings":
+    {
+        "tab_size" : 2,
+        "translate_tabs_to_spaces": true
+        
+    },
+    "rulers":[80]
 }

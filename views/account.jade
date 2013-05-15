@@ -3,5 +3,5 @@ extend layout
 block content
 
 	p ID: #{user.id} 
-	p Name: #{user.displayName}
-	p Email: #{user.emails[0].value}
+	p Name: #{user.firstname + " "+user.lastname}
+	p Email: #{user.email}
