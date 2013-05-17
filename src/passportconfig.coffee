@@ -1,3 +1,8 @@
+#
+# This file configures passport.  For now we are only using the google strategy
+#
+
+# grab passport, and the DB connection
 passport = require("passport")
 GoogleStrategy = require("passport-google").Strategy
 db = require("./databaseconnect")
@@ -9,16 +14,15 @@ dbconfig = dbsettings.config
 handleError =  (err) ->
   console.warn err
 
-db.initializeDB dbconfig, (result) ->
-  handleError result
+# initialize the database
+db.initializeDB dbconfig, (err) ->
+  handleError err
 
-# Passport session setup.
-#   To support persistent login sessions, Passport needs to be able to
-#   serialize users into and deserialize users out of the session. Typically,
-#   this will be as simple as storing the user ID when serializing,
-#   and finding the user by ID when deserializing.
-#   However, since this example does not have a database of user records,
-#   the complete Google profile is serialized and deserialized.
+# Set up the serialization and Deserialization of the user.
+# In this case we serialize it by returning the id, and unserialize by
+# retrieving the record from the database
+
+
 passport.serializeUser = (user, done) ->
   done null, user.id
 
@@ -28,16 +32,14 @@ passport.deserializeUser = (id, done) ->
       done null, result
     else
       handleError result
-
   db.getUserByID id, handleResult
 
 
+# Here we set up the Google strategy, with a config object and then a
+# handle function to take the profile information and store it in the db if
+# necessary before returning a db record to represent the user
 
-# Use the GoogleStrategy within Passport.
-#   Strategies in passport require a `validate` function, which accept
-#   credentials (in this case, an OpenID identifier and profile), and invoke
-#   a callback with a user object.
-
+# this should probably be split out somewhere
 googleconfig =
   returnURL: "http://localhost:3000/auth/google/return"
   realm: "http://localhost:3000/"
@@ -61,4 +63,7 @@ googlehandle = (id, profile, done) ->
             handleError result
 
 passport.use new GoogleStrategy( googleconfig , googlehandle)
+
+
+# export the configured passport object
 exports.configuredpassport = passport
