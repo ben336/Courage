@@ -15,6 +15,11 @@ module.exports = (grunt) ->
         options:
           indentation:
             value: 2
+    docco:
+      debug:
+        src: ["./*.coffee", "src/**/*.coffee"],
+        options:
+          output: "docs/"
     jshint:
       files: ["./*.js", "src/**/*.js", "spec/**/*.js"]
       options:
@@ -46,4 +51,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-jasmine-node"
   grunt.loadNpmTasks "grunt-contrib-jshint"
   grunt.loadNpmTasks "grunt-coffeelint"
+  grunt.loadNpmTasks "grunt-docco"
+
+  grunt.registerTask "docs", ["docco"]
   grunt.registerTask "test", ["coffeelint","jasmine-node","jshint"]

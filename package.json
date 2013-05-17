@@ -13,7 +13,7 @@
     "grunt-coffeelint": ">= 0.0.6",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.4.3",
-    "grunt-contrib-jasmine-node": "0.1.0"
-
-}
+    "grunt-contrib-jasmine-node": "0.1.0",
+    "grunt-docco": "0.2.0"
+  }
 }
