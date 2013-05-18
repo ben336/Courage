@@ -1,13 +1,13 @@
 #For right now just check that it passes an object along acceptably
-db = require("../src/databaseconnect")
-dbsettings = require("../config/dbsettings")
+db = require "../src/databaseconnect"
+dbsettings = require "../src/config/dbsettings"
 dbconfig = dbsettings.config
 
 ERROR = "Error"
 SUCCESS = "Success"
 
 USER =
-  id: "testID"+Math.floor(Math.random()*100)
+  id: "testID" + Math.floor(Math.random() * 100)
   name:
     givenName: "John"
     familyName: "Doe"

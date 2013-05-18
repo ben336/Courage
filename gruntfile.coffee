@@ -1,8 +1,19 @@
 module.exports = (grunt) ->
   grunt.initConfig (
+    coffee:
+      glob_to_multiple:
+        options:
+          sourceMap: true
+        expand:true
+        flatten:true
+        cwd: "assets/js"
+        src: ["*.coffee"]
+        dest: "app/js/"
+        ext: ".js"
     "jasmine-node":
       options:
         coffee: true
+        forceexit:true
       run:
         spec: "spec"
       env:
@@ -51,7 +62,9 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-jasmine-node"
   grunt.loadNpmTasks "grunt-contrib-jshint"
   grunt.loadNpmTasks "grunt-coffeelint"
+  grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-docco"
 
   grunt.registerTask "docs", ["docco"]
   grunt.registerTask "test", ["coffeelint","jasmine-node","jshint"]
+  grunt.registerTask "deploy", ["test","coffee"]

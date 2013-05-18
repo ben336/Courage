@@ -6,7 +6,7 @@
 passport = require("passport")
 GoogleStrategy = require("passport-google").Strategy
 db = require("./databaseconnect")
-dbsettings= require("../config/dbsettings")
+dbsettings= require("./config/dbsettings")
 
 dbconfig = dbsettings.config
 

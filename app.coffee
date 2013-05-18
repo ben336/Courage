@@ -31,7 +31,8 @@ app.configure ->
   app.use passport.initialize()
   app.use passport.session()
   app.use app.router
-  app.use(express.static(__dirname + "/../../public"))
+  app.use(express.static(__dirname + "/public"))
+  app.use(express.static(__dirname + "/app"))
 
 
 # root route
@@ -43,9 +44,14 @@ app.get "/account", ensureAuthenticated, (req, res) ->
   res.render "account", { user: req.user }
 
 # new campaign route
-
 app.get "/campaign", ensureAuthenticated, (req, res) ->
   res.render "campaign", {user: req.user}
+
+#createcampaignroute
+
+app.get "/createcampaign", ensureAuthenticated, (req, res) ->
+  name = req.query.name
+  res.send {name:name}
 
 # login route
 app.get "/login", (req, res) ->
