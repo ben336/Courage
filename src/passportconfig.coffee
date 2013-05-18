@@ -24,7 +24,7 @@ db.initializeDB dbconfig, (err) ->
 
 
 passport.serializeUser = (user, done) ->
-  done null, user.id
+  done null, user.googleid
 
 passport.deserializeUser = (id, done) ->
   handleResult = (success,result) ->

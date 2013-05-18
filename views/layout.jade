@@ -5,15 +5,17 @@ html
 	body
 		- if (!user)
 			p
-				a(href="/") Home 
+				a(href="/") Home
 				|
 				a(href="/login") Log In
 				|
-		- else 
+		- else
 			p
-				a(href="/") Home 
+				a(href="/") Home
 				|
-				a(href="/account") Account 
+				a(href="/account") Account
+				|
+				a(href="/campaign") New Campaign
 				|
 				a(href="/logout") Log Out
 		#content

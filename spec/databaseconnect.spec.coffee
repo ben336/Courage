@@ -65,7 +65,7 @@ describe "DatabaseConnection", ->
 
     runs ( ->
       expect(record).not.toBeFalsy()
-      expect(record.id).toBe(USER.id)
+      expect(record.googleid).toBe(USER.id)
       expect(record.lastname).toBe(USER.name.familyName)
       expect(record.firstname).toBe(USER.name.givenName)
       expect(record.email).toBe(USER.emails[0].value)
@@ -89,7 +89,7 @@ describe "DatabaseConnection", ->
 
     runs ( ->
       expect(record).not.toBeFalsy()
-      expect(record.id).toBe(USER.id)
+      expect(record.googleid).toBe(USER.id)
       expect(record.lastname).toBe(USER.name.familyName)
       expect(record.firstname).toBe(USER.name.givenName)
       expect(record.email).toBe(USER.emails[0].value)
@@ -118,7 +118,7 @@ describe "DatabaseConnection", ->
 
     runs ( ->
       expect(record).not.toBeFalsy()
-      expect(record.id).toBe(USER.id)
+      expect(record.googleid).toBe(USER.id)
       expect(record.lastname).toBe(USER.name.familyName)
       expect(record.firstname).toBe(USER.name.givenName)
       expect(record.email).toBe(USER.emails[0].value)

@@ -33,20 +33,20 @@ addUserToDB = (user,callback) ->
   fname = user.name.givenName
   lname = user.name.familyName
   email = user.emails[0].value
-  query = "INSERT INTO people(id,firstname,lastname,email) " +
+  query = "INSERT INTO people(googleid,firstname,lastname,email) " +
     "values($1,$2,$3,$4) RETURNING *"
   exec = client.query query, [id, fname, lname, email]
   addUserEvents exec, callback
 
 # Get the user from the DB based on their userID
 getUserByID = (id,callback) ->
-  query = "SELECT * FROM people where id = $1"
+  query = "SELECT * FROM people where googleid = $1"
   exec = client.query(query,[id])
   addUserEvents exec, callback
 
 # Remove the user from their DB by their ID
 removeUserByID = (id,callback) ->
-  query = "Delete FROM people where id = $1 RETURNING *"
+  query = "Delete FROM people where googleid = $1 RETURNING *"
   exec = client.query(query,[id])
   addUserEvents exec, callback
 

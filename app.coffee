@@ -42,6 +42,11 @@ app.get "/", (req, res) ->
 app.get "/account", ensureAuthenticated, (req, res) ->
   res.render "account", { user: req.user }
 
+# new campaign route
+
+app.get "/campaign", ensureAuthenticated, (req, res) ->
+  res.render "campaign", {user: req.user}
+
 # login route
 app.get "/login", (req, res) ->
   res.render "login", { user: req.user }
