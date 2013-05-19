@@ -5,23 +5,32 @@
 
 # We use the pg postgres module for connecting to the DB
 pg = require "pg"
+dbsettings= require("./config/dbsettings")
+dbconfig = dbsettings.config
 client = null
+initialized = false
 
 
 # Attaches callbacks to the different query related events
-addUserEvents = (exec, callback) ->
-  user = null
+addQueryEvents = (exec, callback) ->
+  results = []
   exec.on "row", (row) ->
-    user = row
+    results.push row
 
   exec.on "error", (err) ->
     callback false, err
 
   exec.on "end", ->
-    callback true, user
+    callback true, results
 
 # Start up the Database connection
+# use the cfg param for config if provided, otherwise use the defaults
+# if the db is already initialized it returns false
+# may want to add a way to override or uninitialize if we need multiple
+# configurations.  Not an issue for now
 initializeDB = (cfg,callback) ->
+  if initialized then return false
+  cfg ?= dbconfig
   conn = "tcp://#{cfg.role}:#{cfg.port}@#{cfg.address}/#{cfg.db}"
   client = new pg.Client(conn)
   client.connect(callback)
@@ -36,19 +45,19 @@ addUserToDB = (user,callback) ->
   query = "INSERT INTO people(googleid,firstname,lastname,email) " +
     "values($1,$2,$3,$4) RETURNING *"
   exec = client.query query, [id, fname, lname, email]
-  addUserEvents exec, callback
+  addQueryEvents exec, callback
 
 # Get the user from the DB based on their userID
 getUserByID = (id,callback) ->
   query = "SELECT * FROM people where googleid = $1"
   exec = client.query(query,[id])
-  addUserEvents exec, callback
+  addQueryEvents exec, callback
 
 # Remove the user from their DB by their ID
 removeUserByID = (id,callback) ->
   query = "Delete FROM people where googleid = $1 RETURNING *"
   exec = client.query(query,[id])
-  addUserEvents exec, callback
+  addQueryEvents exec, callback
 
 # export the functions
 exports.initializeDB = initializeDB

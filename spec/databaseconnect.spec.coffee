@@ -55,10 +55,10 @@ describe "DatabaseConnection", ->
     runs ( ->
       db.addUserToDB USER, (success,result) ->
         if success
-          record = result
+          record = result[0]
         else
           wasError = true
-          record = result
+          record = result[0]
     )
     temp = () -> (record? or wasError)
     waitsFor( temp, "The insert was attempted", 500 )
@@ -79,7 +79,7 @@ describe "DatabaseConnection", ->
     runs ( ->
       db.getUserByID USER.id, (success,result) ->
         if success
-          record = result
+          record = result[0]
         else
           wasError = true
           record = result
@@ -105,7 +105,7 @@ describe "DatabaseConnection", ->
     runs ( ->
       db.removeUserByID USER.id, (success,result) ->
         if success
-          record = result
+          record = result[0]
         else
           wasError = true
           record = result
@@ -126,7 +126,7 @@ describe "DatabaseConnection", ->
       db.getUserByID USER.id, (success,result) ->
         if success
           attempt = true
-          record = result
+          record = result[0]
         else
           wasError = true
           record = result

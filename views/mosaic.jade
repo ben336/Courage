@@ -1,0 +1,11 @@
+extend layout
+
+block content
+
+  h3 Hi #{user.firstname}
+  p Start a new mosaic here
+  hr
+  p Mosaic Name:
+  input(id="mosaicname")
+  a(href="#", id="newmosaicbutton") OK
+  div(id="message")

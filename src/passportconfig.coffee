@@ -3,35 +3,28 @@
 #
 
 # grab passport, and the DB connection
-passport = require("passport")
+passport = require "passport"
 GoogleStrategy = require("passport-google").Strategy
-db = require("./databaseconnect")
-dbsettings= require("./config/dbsettings")
+db = require "./databaseconnect"
+err = require "./errorHandler"
 
-dbconfig = dbsettings.config
-
-# temporary error handling till I make it a system component
-handleError =  (err) ->
-  console.warn err
 
 # initialize the database
-db.initializeDB dbconfig, (err) ->
-  handleError err
+db.initializeDB null, err.handle
 
 # Set up the serialization and Deserialization of the user.
 # In this case we serialize it by returning the id, and unserialize by
 # retrieving the record from the database
-
-
 passport.serializeUser = (user, done) ->
   done null, user.googleid
 
 passport.deserializeUser = (id, done) ->
-  handleResult = (success,result) ->
+  handleResult = (success,results) ->
+    user = results[0]
     if success
-      done null, result
+      done null, user
     else
-      handleError result
+      err.handle user
   db.getUserByID id, handleResult
 
 
@@ -50,17 +43,21 @@ googlehandle = (id, profile, done) ->
   process.nextTick ->
     # Take the id and get the user from the DB, or add it if necessary
     profile.id = id
-    db.getUserByID id, (success,result) ->
-      if success and result
-        done null, result
-      else if result and result.error
-        handleError result
+    # this got a bit confusing, but results is the returned user
+    # if the user is available, an empty array if not found,
+    # and an error message if there is a problem
+    db.getUserByID id, (success,results) ->
+      user = results[0]
+      if success and user
+        done null, user
+      else if results and results.error
+        err.handle results
       else
-        db.addUserToDB profile, (success,result) ->
+        db.addUserToDB profile, (success,results) ->
           if success
-            done null, result
+            done null, results[0]
           else
-            handleError result
+            err.handle results
 
 passport.use new GoogleStrategy( googleconfig , googlehandle)
 
