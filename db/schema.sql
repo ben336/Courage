@@ -1,3 +1,4 @@
+DROP VIEW MOSAIC_VIEW;
 DROP TABLE PEOPLE;
 DROP TABLE MOSAIC;
 DROP TABLE MESSAGE;
@@ -29,7 +30,7 @@ CREATE TABLE PEOPLE(
 
 
 CREATE TABLE MOSAIC(
-	ID SERIAL PRIMARY KEY,
+	KEY VARCHAR(50) PRIMARY KEY,
 	Name VARCHAR(100),
 	Description TEXT,
 	/* Owner and Target refer to an ID in the people field,
@@ -46,10 +47,7 @@ CREATE TABLE MOSAIC(
 		1 - public
 		with room to expand
 	*/
-	VISIBLITY INT2,
-	/** hash to allow viewing of private campaign */
-	KEY VARCHAR(50)
-	FLAGGED
+	VISIBLITY INT2
 );
 
 
@@ -68,4 +66,28 @@ CREATE TABLE MESSAGE(
 	*/
 	VISIBLITY INT2
 );
+
+CREATE OR REPLACE VIEW MOSAIC_VIEW AS
+select
+	mosaic.name,
+	mosaic.description,
+	mosaic.key,
+	owner.firstname as ownerfname,
+	owner.lastname as ownerlname,
+	owner.id as ownerid,
+	owner.email as owneremail,
+	target.firstname as targetfname,
+	target.lastname as targetlname,
+	target.id as targetid,
+	target.email as targetemail
+from
+	mosaic,
+	people as owner,
+	people as target
+where
+	mosaic.owner = owner.id
+	and
+	mosaic.target = target.id;
+
+
 

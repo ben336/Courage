@@ -45,12 +45,12 @@ app.get "/account", ensureAuthenticated, (req, res) ->
 
 # new campaign route
 app.get "/mosaic", ensureAuthenticated, (req, res) ->
-  res.render "campaign", {user: req.user}
+  res.render "mosaic", {user: req.user}
 
 #createcampaignroute
 
-app.get "/createmosaic", ensureAuthenticated, (req, res) ->
-  name = req.query.name
+app.post "/createmosaic", ensureAuthenticated, (req, res) ->
+  name = req.body.name
   res.send {name:name}
 
 # login route

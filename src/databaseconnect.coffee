@@ -53,15 +53,50 @@ getUserByID = (id,callback) ->
   exec = client.query(query,[id])
   addQueryEvents exec, callback
 
+# Get the user from the DB based on their email
+getUserByEmail = (email,callback) ->
+  query = "SELECT * FROM people where email = $1"
+  exec = client.query(query,[email])
+  addQueryEvents exec, callback
+
 # Remove the user from their DB by their ID
 removeUserByID = (id,callback) ->
   query = "Delete FROM people where googleid = $1 RETURNING *"
   exec = client.query(query,[id])
   addQueryEvents exec, callback
 
+# Add a new Mosaic to the Database
+addMosaicToDB = (mosaic,callback) ->
+  key = mosaic.key
+  name = mosaic.name
+  description = mosaic.description
+  owner = mosaic.owner.id
+  target = mosaic.target.id
+  query = "INSERT INTO mosaic(key,name,description,owner,target) " +
+    "values($1,$2,$3,$4,$5) RETURNING *"
+  exec = client.query query, [key,name,description,owner,target]
+  addQueryEvents exec, callback
+
+# Get the mosaic from the DB based on their key
+getMosaicByKey = (key,callback) ->
+  query = "SELECT * FROM mosaic where key = $1"
+  exec = client.query(query,[key])
+  addQueryEvents exec, callback
+
+# Remove the mosaic from the DB based on their key
+removeMosaicByKey = (key,callback) ->
+  query = "Delete FROM mosaic where key = $1 RETURNING *"
+  exec = client.query(query,[key])
+  addQueryEvents exec, callback
+
+
 # export the functions
 exports.initializeDB = initializeDB
 exports.addUserToDB = addUserToDB
 exports.getUserByID = getUserByID
+exports.getUserByEmail = getUserByEmail
 exports.removeUserByID = removeUserByID
+exports.addMosaicToDB = addMosaicToDB
+exports.getMosaicByKey = getMosaicByKey
+exports.removeMosaicByKey = removeMosaicByKey
 
