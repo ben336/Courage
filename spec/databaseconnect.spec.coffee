@@ -188,8 +188,8 @@ describe "DatabaseConnection", ->
       expect(record).not.toBeFalsy()
       expect(record.name).toBe(MOSAIC.name)
       expect(record.description).toBe(MOSAIC.description)
-      expect(record.owner).toBe(MOSAIC.owner.id)
-      expect(record.target).toBe(MOSAIC.target.id)
+      expect(record.ownerfname).toBe(USER.name.givenName)
+      expect(record.targetfname).toBe(USER2.name.givenName)
     )
 
   it "can delete a mosaic record", ->

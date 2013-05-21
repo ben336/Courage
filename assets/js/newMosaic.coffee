@@ -5,14 +5,15 @@ button.click ->
   # but this is fine for now till we solidify the backend
   mosaicData =
     name: $("#mosaicname").val()
-    description: $("#mosaicname").text()
+    description: $("#mosaicdescription").text()
     target:
-      fname:$("#targetfname").val()
-      lname:$("#targetlname").val()
-      email:$("#targetemail").val()
+      name:
+        givenName:$("#targetfname").val()
+        familyName:$("#targetlname").val()
+      emails:[{value:$("#targetemail").val()}]
   $.post("/createmosaic",mosaicData).done( handleNewMosaic )
 
-
+# handles the ajax response when a new mosaic is created
 handleNewMosaic = (data) ->
   #should handle an error case here at some point
   name = data.name

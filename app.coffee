@@ -6,6 +6,7 @@
 require "coffee-script"
 express = require "express"
 passportconfig = require "./src/passportconfig"
+mosaic = require "./src/mosaic"
 
 passport = passportconfig.configuredpassport
 app = express.createServer()
@@ -43,6 +44,11 @@ app.get "/", (req, res) ->
 app.get "/account", ensureAuthenticated, (req, res) ->
   res.render "account", { user: req.user }
 
+# Mosaic Page route
+
+app.get "/mosaicpage/:key", (req,res) ->
+  mosaic.getPage req.params.key , req,res
+
 # new campaign route
 app.get "/mosaic", ensureAuthenticated, (req, res) ->
   res.render "mosaic", {user: req.user}
@@ -50,8 +56,8 @@ app.get "/mosaic", ensureAuthenticated, (req, res) ->
 #createcampaignroute
 
 app.post "/createmosaic", ensureAuthenticated, (req, res) ->
-  name = req.body.name
-  res.send {name:name}
+  mosaic.create req.body, req.user, (mosaicData)->
+    res.send mosaicData
 
 # login route
 app.get "/login", (req, res) ->

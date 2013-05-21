@@ -1,0 +1,11 @@
+extend layout
+
+block content
+
+  - if (!mosaic)
+    h2 No Mosaic Found
+  - else
+    h2 Mosaic #{mosaic.name}
+    p Create message
+    textarea(rows="4", cols="50",id="newmessage")
+    a(href="#",id="submitmessage") Submit Message

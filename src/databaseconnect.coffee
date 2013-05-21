@@ -79,7 +79,7 @@ addMosaicToDB = (mosaic,callback) ->
 
 # Get the mosaic from the DB based on their key
 getMosaicByKey = (key,callback) ->
-  query = "SELECT * FROM mosaic where key = $1"
+  query = "SELECT * FROM mosaic_view where key = $1"
   exec = client.query(query,[key])
   addQueryEvents exec, callback
 
