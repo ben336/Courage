@@ -89,6 +89,35 @@ removeMosaicByKey = (key,callback) ->
   exec = client.query(query,[key])
   addQueryEvents exec, callback
 
+# Add a new message to the Database
+addMessageToDB = (message,callback) ->
+  writer = message.writer.id
+  msg = message.message
+  mosaic = message.mosaic.key
+  snippet = message.snippet
+  query = "INSERT INTO message(writer,message,snippet,mosaic) " +
+    "values($1,$2,$3,$4) RETURNING *"
+  exec = client.query query, [writer,msg,snippet,mosaic]
+  addQueryEvents exec, callback
+
+# Get the message from the DB based on their id
+getMessageByID = (id,callback) ->
+  query = "SELECT * FROM message where id = $1"
+  exec = client.query(query,[id])
+  addQueryEvents exec, callback
+
+# get all the messages for a given mosaic
+getMessagesForMosaicKey = (key,callback) ->
+  query = "SELECT * FROM message where mosaic = $1"
+  exec = client.query(query,[key])
+  addQueryEvents exec, callback
+
+# Remove the message from the DB based on their id
+removeMessageByID = (id,callback) ->
+  query = "Delete FROM message where id = $1 RETURNING *"
+  exec = client.query(query,[id])
+  addQueryEvents exec, callback
+
 
 # export the functions
 exports.initializeDB = initializeDB
@@ -99,4 +128,8 @@ exports.removeUserByID = removeUserByID
 exports.addMosaicToDB = addMosaicToDB
 exports.getMosaicByKey = getMosaicByKey
 exports.removeMosaicByKey = removeMosaicByKey
+exports.addMessageToDB = addMessageToDB
+exports.getMessageByID = getMessageByID
+exports.getMessagesForMosaicKey = getMessagesForMosaicKey
+exports.removeMessageByID = removeMessageByID
 

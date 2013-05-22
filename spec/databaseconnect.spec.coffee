@@ -27,6 +27,9 @@ MOSAIC =
     owner: {}
     target: {}
 
+MESSAGE = null
+MESSAGE2 = null
+
 describe "DatabaseConnection", ->
 
   it "will return an error if the DB is not configured", ->
@@ -190,6 +193,113 @@ describe "DatabaseConnection", ->
       expect(record.description).toBe(MOSAIC.description)
       expect(record.ownerfname).toBe(USER.name.givenName)
       expect(record.targetfname).toBe(USER2.name.givenName)
+    )
+
+  it "can insert a message for a mosaic", ->
+    record = null
+    wasError = false
+    runs ( ->
+      MESSAGE =
+        message : "This is a test"
+        mosaic :
+          key: MOSAIC.key
+        writer :
+          id: MOSAIC.target.id
+        snippet: "this is a test"
+
+      MESSAGE2 =
+        message : "This is another test"
+        mosaic :
+          key: MOSAIC.key
+        writer :
+          id: MOSAIC.owner.id
+        snippet: "this is another test"
+      #add both messages, only test the first one for now
+      db.addMessageToDB MESSAGE2, (success,result) ->
+        MESSAGE2.id = result[0].id
+      db.addMessageToDB MESSAGE, (success,result) ->
+        if success
+          record = result[0]
+        else
+          wasError = true
+          record = result[0]
+    )
+    temp = () -> (record? or wasError)
+    waitsFor( temp, "The insert was attempted", 500 )
+
+    runs ( ->
+      expect(record).not.toBeFalsy()
+      expect(record.message).toBe(MESSAGE.message)
+      expect(record.mosaic).toBe(MESSAGE.mosaic.key)
+      expect(record.writer).toBe(MESSAGE.writer.id)
+      expect(record.snippet).toBe(MESSAGE.snippet)
+      MESSAGE.id = record.id
+    )
+
+  it "can get a message by id", ->
+    record = null
+    wasError = false
+    runs ( ->
+      db.getMessageByID MESSAGE.id, (success,result) ->
+        if success
+          record = result[0]
+        else
+          wasError = true
+          record = result[0]
+    )
+    temp = () -> (record? or wasError)
+    waitsFor( temp, "The select was attempted", 500 )
+
+    runs ( ->
+      expect(record).not.toBeFalsy()
+      expect(record.message).toBe(MESSAGE.message)
+      expect(record.mosaic).toBe(MESSAGE.mosaic.key)
+      expect(record.writer).toBe(MESSAGE.writer.id)
+      expect(record.snippet).toBe(MESSAGE.snippet)
+    )
+
+  it "can get a group of messages by Mosaic", ->
+    records = null
+    wasError = false
+    attempted = false
+    runs ( ->
+      db.getMessagesForMosaicKey MOSAIC.key, (success,result) ->
+        if success
+          records = result
+          attempted = true
+        else
+          wasError = true
+          records = result
+    )
+    temp = () -> (attempted or wasError)
+    waitsFor( temp, "The aggregation was attempted", 500 )
+
+    runs ( ->
+      expect(records).not.toBeFalsy()
+      expect(records.length).toBe(2)
+    )
+
+  it "can get delete message by id", ->
+    record = null
+    wasError = false
+    runs ( ->
+      db.removeMessageByID MESSAGE2.id, () ->
+      db.removeMessageByID MESSAGE.id, (success,result) ->
+        if success
+          record = result[0]
+        else
+          wasError = true
+          record = result[0]
+    )
+    temp = () -> (record? or wasError)
+    waitsFor( temp, "The select was attempted", 500 )
+
+    runs ( ->
+      expect(record).not.toBeFalsy()
+      expect(record.message).toBe(MESSAGE.message)
+      expect(record.mosaic).toBe(MESSAGE.mosaic.key)
+      expect(record.writer).toBe(MESSAGE.writer.id)
+      expect(record.snippet).toBe(MESSAGE.snippet)
     )
 
   it "can delete a mosaic record", ->
