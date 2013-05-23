@@ -1,0 +1,131 @@
+
+/*
+This is the main class for handling incoming requests, using express to
+route them appropriately
+*/
+var app, ensureAuthenticated, express, mosaic, passport, passportconfig;
+
+require("coffee-script");
+
+express = require("express");
+
+passportconfig = require("./src/passportconfig");
+
+mosaic = require("./src/mosaic");
+
+passport = passportconfig.configuredpassport;
+
+app = express.createServer();
+
+/*
+Simple route middleware to ensure user is authenticated.
+*/
+ensureAuthenticated = function(req, res, next) {
+  if ( req.isAuthenticated() ) {
+    return next();
+  }
+  res.redirect("/login");
+};
+
+/*
+Configure Express
+*/
+app.configure(function() {
+  app.set("views", __dirname + "/views");
+  app.set("view engine", "jade");
+  app.set("view options", {
+    layout: false
+  });
+  app.use(express.logger());
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.session({
+    secret: "keyboard cat"
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.static(__dirname + "/public"));
+  app.use(express.static(__dirname + "/app"));
+});
+
+/*
+root route
+*/
+app.get("/", function(req, res) {
+  res.render("index", {
+    user: req.user
+  });
+});
+
+/*
+account route
+*/
+app.get("/account", ensureAuthenticated, function(req, res) {
+  res.render("account", {
+    user: req.user
+  });
+});
+
+/*
+Mosaic Page route
+*/
+app.get("/mosaicpage/:key", function(req, res) {
+  mosaic.getPage(req.params.key, req, res);
+});
+
+/*
+new mosaic route
+*/
+app.get("/mosaic", ensureAuthenticated, function(req, res) {
+  res.render("mosaic", {
+    user: req.user
+  });
+});
+
+/*
+create mosaic route
+*/
+app.post("/createmosaic", ensureAuthenticated, function(req, res) {
+  mosaic.create(req.body, req.user, function(mosaicData) {
+    res.send(mosaicData);
+  });
+});
+
+/*
+login route
+*/
+app.get("/login", function(req, res) {
+  res.render("login", {
+    user: req.user
+  });
+});
+
+/*
+google authentication
+*/
+app.get("/auth/google", passport.authenticate("google", {
+  failureRedirect: "/login"
+}), function(req, res) {
+  res.redirect("/");
+});
+
+/*
+google authentication 2 (this may not be necessary)
+*/
+app.get("/auth/google/return", passport.authenticate("google", {
+  failureRedirect: "/login"
+}), function(req, res) {
+  res.redirect("/");
+});
+
+/*
+logout route
+*/
+app.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
+app.listen(3000);

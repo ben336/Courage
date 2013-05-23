@@ -15,6 +15,7 @@
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-jasmine-node": "0.1.0",
     "grunt-docco": "0.2.0",
-    "grunt-contrib-coffee": "~0.7.0"
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-dox": "~0.4.1"
   }
 }
