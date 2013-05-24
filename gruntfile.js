@@ -18,12 +18,14 @@ module.exports = function(grunt) {
         title: "Courage documentation"
       },
       files: {
-        src: ["./*.js","src/**/*","spec/**/*","public/js/**/*"],
+        src: ["./*.js","src/**/*","spec/**/*.js","public/js/*.js",
+          "!public/js/lib/*"],
         dest: "docs"
       }
     },
     jshint: {
-      files: ["./*.js", "src/**/*.js", "spec/**/*.js","public/js/**/*"],
+      files: ["./*.js","src/**/*.js","spec/**/*.js","public/js/*.js",
+          "!public/js/lib/*"],
       options: {
         bitwise: true,
         curly: true,
@@ -40,6 +42,7 @@ module.exports = function(grunt) {
         node: true,
         jquery:true,
         globals: {
+          ko:false,
           describe: false,
           it: false,
           expect: false,

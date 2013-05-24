@@ -1,18 +1,18 @@
 extend layout
 
 block content
-
-  h3 Hi #{user.firstname}
-  p Start a new mosaic here
-  hr
-  p Mosaic Name:
-  input(id="mosaicname")
-  p Mosaic Description
-  textarea(rows="4", cols="50", id="mosaicdescription", placeholder="Enter a description")
-  p Recipient Name
-  input(id="targetfname", placeholder="First Name")
-  input(id="targetlname", placeholder="Last Name")
-  p Recipient Email
-  input(id="targetemail")
-  a(href="#", id="newmosaicbutton") OK
-  div(id="message")
+  div(id="mosaicform")
+    h3 Hi #{user.firstname}
+    p Start a new mosaic here
+    hr
+    p Mosaic Name:
+    input(data-bind="value:name")
+    p Mosaic Description
+    textarea(rows="4", cols="50", data-bind="text:description", placeholder="Enter a description")
+    p Recipient Name
+    input(data-bind="value:target.name.givenName", placeholder="First Name")
+    input(data-bind="value:target.name.familyName", placeholder="Last Name")
+    p Recipient Email
+    input(data-bind="value:target.emails[0].value")
+    a(href="#", id="newmosaicbutton") OK
+    div(id="message")

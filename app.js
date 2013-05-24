@@ -5,8 +5,6 @@ route them appropriately
 */
 var app, ensureAuthenticated, express, mosaic, passport, passportconfig;
 
-require("coffee-script");
-
 express = require("express");
 
 passportconfig = require("./src/passportconfig");
@@ -47,7 +45,6 @@ app.configure(function() {
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + "/public"));
-  app.use(express.static(__dirname + "/app"));
 });
 
 /*

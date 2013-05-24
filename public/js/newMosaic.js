@@ -1,33 +1,31 @@
 (function() {
-  var button, handleNewMosaic;
+  var button, handleNewMosaic, mosaicData;
+
+  /* this should really be replaced with a knockout solution */
+  mosaicData = {
+    name: ko.observable(),
+    description: ko.observable(),
+    target: {
+      name: {
+        givenName: ko.observable(),
+        familyName: ko.observable()
+      },
+      emails: [{value:ko.observable()}]
+    }
+  };
+  ko.applyBindings(mosaicData,document.getElementById("mosaicform"));
 
   button = $("#newmosaicbutton");
 
-  button.click(function() {
-    var mosaicData;
 
-    /* this should really be replaced with a knockout solution */
-    mosaicData = {
-      name: $("#mosaicname").val(),
-      description: $("#mosaicname").text(),
-      target: {
-        name: {
-          givenName: $("#targetfname").val(),
-          familyName: $("#targetlname").val()
-        },
-        emails: [
-          {
-            value: $("#targetemail").val()
-          }
-        ]
-      }
-    };
-    return $.post("/createmosaic", mosaicData).done(handleNewMosaic);
+
+
+  button.click(function() {
+    $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
   });
 
   handleNewMosaic = function(data) {
     var message, name;
-
     name = data.name;
     message = "Mosaic created for " + name;
     return $("#message").html(message);
