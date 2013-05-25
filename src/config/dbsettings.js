@@ -1,5 +1,5 @@
 var config = {
-  role : "ben",
+  role : "postgres",
   port : "5432",
   address :"localhost",
   db : "Courage"
