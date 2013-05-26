@@ -55,7 +55,7 @@ initializeDB = function(cfg, callback) {
   if (cfg == null) {
     cfg = dbconfig;
   }
-  conn = "tcp://" + cfg.role + ":" + cfg.port +
+  conn = "tcp://" + cfg.role + ":" + cfg.password +
     "@" + cfg.address + "/" + cfg.db;
   client = new pg.Client(conn);
   client.connect(callback);

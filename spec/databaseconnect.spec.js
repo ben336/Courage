@@ -56,7 +56,7 @@ describe("DatabaseConnection", function() {
     status = null;
     baddbconfig = {
       role: "nonexistentuser",
-      port: "5432",
+      password: "5432",
       address: "localhost",
       db: "Courage"
     };
