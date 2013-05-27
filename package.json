@@ -12,6 +12,6 @@
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-jasmine-node": "0.1.0",
-    "grunt-dox": "~0.4.1"
+    "grunt-dox": "~0.4.2"
   }
 }

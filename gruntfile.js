@@ -1,4 +1,12 @@
 
+/*
+# Grunt Config
+This serves as the main configuration file for grunt.
+It controls the different tasks.
+Unfortunately, it also doesn't get along well with dox our documentation
+engine, because dox doesn't handle comment like syntax in strings
+very well, and chokes on it.
+*/
 module.exports = function(grunt) {
   grunt.initConfig({
     "jasmine-node": {
@@ -18,8 +26,8 @@ module.exports = function(grunt) {
         title: "Courage documentation"
       },
       files: {
-        src: ["./*.js","src/**/*","spec/**/*.js","public/js/*.js",
-          "!public/js/lib/*"],
+        ignore: ['views'],
+        src: ["./*.js","src/**/*","spec/**/*.js","public/**/*.js"],
         dest: "docs"
       }
     },

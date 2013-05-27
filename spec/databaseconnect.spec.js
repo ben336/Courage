@@ -1,9 +1,11 @@
+/*
+Test file for the database connect operations.
+*/
 
 var ERROR, MESSAGE, MESSAGE2, MOSAIC, SUCCESS,
   USER, USER2, db, dbconfig, dbsettings;
 
 db = require("../src/databaseconnect");
-
 dbsettings = require("../src/config/dbsettings");
 
 dbconfig = dbsettings.config;
@@ -11,6 +13,10 @@ dbconfig = dbsettings.config;
 ERROR = "Error";
 
 SUCCESS = "Success";
+
+/*
+Create the configs of 2 test users and a test mosaic
+*/
 
 USER = {
   id: "testID" + Math.floor(Math.random() * 100),
@@ -50,6 +56,12 @@ MESSAGE = null;
 
 MESSAGE2 = null;
 
+
+/*
+### Tests
+
+Start with testing whether connecting to the database works correctly
+*/
 describe("DatabaseConnection", function() {
   it("will return an error if the DB is not configured", function() {
     var baddbconfig, status, temp;
@@ -73,6 +85,7 @@ describe("DatabaseConnection", function() {
       expect(status).toBe(ERROR);
     });
   });
+
   it("can connect to the DB", function() {
     var status, temp;
     status = null;
@@ -89,6 +102,10 @@ describe("DatabaseConnection", function() {
       expect(status).toBe(SUCCESS);
     });
   });
+
+  /**
+  Test whether it can manage users correctly
+  **/
   it("can insert a user record", function() {
     var mosaicsetup, record, temp, wasError;
     record = null;
@@ -127,6 +144,7 @@ describe("DatabaseConnection", function() {
     };
     return waitsFor(temp, "Mosaic is set up", 500);
   });
+
   it("can read a user record using id", function() {
     var record, temp, wasError;
     record = null;
@@ -153,6 +171,7 @@ describe("DatabaseConnection", function() {
       expect(record.email).toBe(USER.emails[0].value);
     });
   });
+
   it("can read a user record using email", function() {
     var attempted, record, temp, wasError;
     record = null;
@@ -181,6 +200,9 @@ describe("DatabaseConnection", function() {
       expect(record.email).toBe(USER.emails[0].value);
     });
   });
+  /*
+  Test that it can manage mosaic records correctly
+  */
   it("can insert a mosaic record", function() {
     var record, temp, wasError;
     record = null;
@@ -207,6 +229,7 @@ describe("DatabaseConnection", function() {
       expect(record.target).toBe(MOSAIC.target.id);
     });
   });
+
   it("can get a mosaic record by key", function() {
     var record, temp, wasError;
     record = null;
@@ -233,6 +256,9 @@ describe("DatabaseConnection", function() {
       expect(record.targetfname).toBe(USER2.name.givenName);
     });
   });
+  /*
+  Test that it can manage messages correctly
+  */
   it("can insert a message for a mosaic", function() {
     var record, temp, wasError;
     record = null;
@@ -283,6 +309,7 @@ describe("DatabaseConnection", function() {
       MESSAGE.id = record.id;
     });
   });
+
   it("can get a message by id", function() {
     var record, temp, wasError;
     record = null;
@@ -309,6 +336,7 @@ describe("DatabaseConnection", function() {
       expect(record.snippet).toBe(MESSAGE.snippet);
     });
   });
+
   it("can get a group of messages by Mosaic", function() {
     var attempted, records, temp, wasError;
     records = null;
@@ -334,6 +362,9 @@ describe("DatabaseConnection", function() {
       expect(records.length).toBe(2);
     });
   });
+  /*
+  Make sure it can clear out records correctly
+  */
   it("can get delete message by id", function() {
     var record, temp, wasError;
     record = null;
@@ -361,6 +392,7 @@ describe("DatabaseConnection", function() {
       expect(record.snippet).toBe(MESSAGE.snippet);
     });
   });
+
   it("can delete a mosaic record", function() {
     var record, temp, wasError;
     record = null;
@@ -387,7 +419,8 @@ describe("DatabaseConnection", function() {
       expect(record.target).toBe(MOSAIC.target.id);
     });
   });
-  return it("can delete a user record", function() {
+
+  it("can delete a user record (or two)", function() {
     var attempt, record, wasError;
     record = null;
     attempt = null;

@@ -6,6 +6,7 @@ block content
     h2 No Mosaic Found
   - else
     h2 Mosaic #{mosaic.name}
+    p #{mosaic.description}
     p Create message
     textarea(rows="4", cols="50",id="newmessage")
     a(href="#",id="submitmessage") Submit Message
