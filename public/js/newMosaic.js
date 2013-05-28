@@ -39,10 +39,14 @@
   });
 
   handleNewMosaic = function(data) {
-    var message, name;
-    name = data.name;
-    message = "Mosaic created for " + name;
-    return $("#message").html(message);
+    var message;
+    if(data && data.key){
+      document.location.href = "/mosaicpage/"+data.key;
+    }
+    else{
+      message = "Failed to create mosaic" + mosaicData.name;
+      $("#message").html(message);
+    }
   };
 
 }).call(this);
