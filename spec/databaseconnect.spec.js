@@ -360,6 +360,7 @@ describe("DatabaseConnection", function() {
     runs(function() {
       expect(records).not.toBeFalsy();
       expect(records.length).toBe(2);
+      expect(records[0].snippet).not.toBeFalsy();
     });
   });
   /*

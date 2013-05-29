@@ -3,7 +3,7 @@
 This is the main file for handling mosaics.
 */
 
-var create, crypto, db, err, getPage;
+var create, crypto, db, err, getPage,newMessage,getMessages;
 
 db = require("./databaseconnect");
 
@@ -78,8 +78,27 @@ newMessage = function(messageData,user,callback){
     }
     else
     {
-      err.handle("Problem adding message to db");
+      err.handle("Problem adding message to db" + results.error);
       callback(false);
+    }
+  });
+};
+
+/**
+Get a list of the messages for the mosaic
+**/
+getMessages = function(data, callback) {
+  db.getMessagesForMosaicKey(data.key,function(success,results){
+    if(success) {
+      callback({
+        messages:results
+      });
+    }
+    else {
+      err.handle("Can't get messages for Key");
+      callback({
+        messages: []
+      });
     }
   });
 };
@@ -91,5 +110,6 @@ exports.create = create;
 
 exports.getPage = getPage;
 exports.newMessage = newMessage;
+exports.getMessages = getMessages;
 
 

@@ -100,6 +100,15 @@ app.post("/newmessage", ensureAuthenticated, function(req, res) {
 });
 
 /*
+List Messages
+*/
+app.post("/getmessages", function(req,res) {
+  mosaic.getMessages(req.body, function(messages){
+    res.send(messages);
+  });
+});
+
+/*
 login route
 */
 app.get("/login", function(req, res) {

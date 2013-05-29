@@ -12,7 +12,13 @@ block content
       p Snippet
       input(data-bind ="value:snippet")
       p Message
-      textarea(rows = "4", cols = "50",id = "newmessage",data-bind = "text:message")
+      textarea(rows = "4", cols = "50",id = "newmessage", data-bind = "value:message")
       a(href="#",id="submitmessage") Submit Message
+
+    div(id="messageList", data-bind="foreach:messages")
+      p Snippet
+      span(data-bind ="text:snippet")
+      p Message
+      p(data-bind = "text:message")
 
   script(src="/js/mosaicPage.js")

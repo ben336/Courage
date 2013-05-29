@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         title: "Courage documentation"
       },
       files: {
-        ignore: ['views'],
+        ignore: ["views"],
         src: ["./*.js","src/**/*","spec/**/*.js","public/**/*.js"],
         dest: "docs"
       }

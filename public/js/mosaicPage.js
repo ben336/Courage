@@ -1,6 +1,6 @@
 (function() {
 
-  var button, handleNewMessage, messageData,urlParts,mosaicKey;
+  var button, handleNewMessage, messageData,urlParts,mosaicKey,messageList;
 
   urlParts = document.URL.split("/");
   mosaicKey = urlParts[urlParts.length - 1];
@@ -9,9 +9,16 @@
     message: ko.observable(),
     snippet: ko.observable(),
     mosaic: {
-      key:mosaicKey
+      key: mosaicKey
     }
   };
+  $.post("/getmessages",{key:mosaicKey}).done(function(messages) {
+    var returnedMessages = messages.messages;
+    messageList = {
+      messages: ko.observableArray(returnedMessages)
+    };
+    ko.applyBindings(messageList,document.getElementById("messageList"));
+  });
   /**
   After we create the object, we bind it to the form div, to set up the knockout
   2-way binding.
@@ -29,7 +36,12 @@
   });
 
   handleNewMessage = function(data) {
-    alert(data);
+    $.post("/getmessages", {key:mosaicKey}).done(function(messages) {
+      ko.mapping.fromJS(messages, messageList);
+    });
+    if(!data){
+      console.log("Problem adding message");
+    }
   };
 
 }).call(this);
