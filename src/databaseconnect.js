@@ -141,6 +141,17 @@ removeMosaicByKey = function(key, callback) {
 
 /*
  Add a new message to the Database
+ Takes a message in the form
+     {
+        writer:{
+          id:"",
+        },
+        message: "",
+        snippet: "",
+        mosaic{
+          key:""
+        }
+     }
 */
 addMessageToDB = function(message, callback) {
   var exec, mosaic, msg, query, snippet, writer;

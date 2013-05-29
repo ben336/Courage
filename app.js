@@ -91,6 +91,24 @@ app.post("/createmosaic", ensureAuthenticated, function(req, res) {
 });
 
 /*
+new message route
+*/
+app.post("/newmessage", ensureAuthenticated, function(req, res) {
+  mosaic.newMessage(req.body, req.user, function(err) {
+    res.send(err);
+  });
+});
+
+/*
+List Messages
+*/
+app.post("/getmessages", function(req,res) {
+  mosaic.getMessages(req.body, function(messages){
+    res.send(messages);
+  });
+});
+
+/*
 login route
 */
 app.get("/login", function(req, res) {

@@ -1,5 +1,9 @@
 
-var create, crypto, db, err, getPage;
+/*
+This is the main file for handling mosaics.
+*/
+
+var create, crypto, db, err, getPage,newMessage,getMessages;
 
 db = require("./databaseconnect");
 
@@ -7,10 +11,14 @@ err = require("./errorHandler");
 
 crypto = require("crypto");
 
-// initialize the database
+/*
+initialize the database
+*/
 db.initializeDB(null, err.handle);
 
-// Create a new mosaic from the basic data
+/*
+Create a new mosaic from the basic data
+*/
 create = function(mosaicData, user, callback) {
   var email;
   mosaicData.owner = user;
@@ -43,7 +51,9 @@ create = function(mosaicData, user, callback) {
   });
 };
 
-// Get the information for the current mosaic, then render the page
+/*
+Get the information for the current mosaic, then render the page
+*/
 getPage = function(key, req, res) {
   db.getMosaicByKey(key, function(success, results) {
     var gotData, mosaicData;
@@ -56,9 +66,50 @@ getPage = function(key, req, res) {
   });
 };
 
-// export the functions
+/*
+Create a new message
+*/
+
+newMessage = function(messageData,user,callback){
+  messageData.writer = user;
+  db.addMessageToDB(messageData,function(success,results){
+    if(success) {
+      callback(true);
+    }
+    else
+    {
+      err.handle("Problem adding message to db" + results.error);
+      callback(false);
+    }
+  });
+};
+
+/**
+Get a list of the messages for the mosaic
+**/
+getMessages = function(data, callback) {
+  db.getMessagesForMosaicKey(data.key,function(success,results){
+    if(success) {
+      callback({
+        messages:results
+      });
+    }
+    else {
+      err.handle("Can't get messages for Key");
+      callback({
+        messages: []
+      });
+    }
+  });
+};
+
+/*
+export the functions
+*/
 exports.create = create;
 
 exports.getPage = getPage;
+exports.newMessage = newMessage;
+exports.getMessages = getMessages;
 
 
