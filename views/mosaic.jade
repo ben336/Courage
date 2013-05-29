@@ -8,7 +8,7 @@ block content
     p Mosaic Name:
     input(data-bind="value:name")
     p Mosaic Description
-    textarea(rows="4", cols="50", data-bind="text:description", placeholder="Enter a description")
+    textarea(rows="4", cols="50", data-bind="value:description", placeholder="Enter a description")
     p Recipient Name
     input(data-bind="value:target.name.givenName", placeholder="First Name")
     input(data-bind="value:target.name.familyName", placeholder="Last Name")
@@ -16,3 +16,5 @@ block content
     input(data-bind="value:target.emails[0].value")
     a(href="#", id="newmosaicbutton") OK
     div(id="message")
+
+  script(src="js/newMosaic.js")
