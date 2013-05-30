@@ -3,7 +3,7 @@
   var button, handleNewMessage, messageData,urlParts,mosaicKey,messageList;
 
   urlParts = document.URL.split("/");
-  mosaicKey = urlParts[urlParts.length - 1];
+  mosaicKey = urlParts[urlParts.length - 2];
 
   messageData = {
     message: ko.observable(),

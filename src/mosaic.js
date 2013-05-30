@@ -2,13 +2,10 @@
 /*
 This is the main file for handling mosaics.
 */
-
-var create, crypto, db, err, getPage,newMessage,getMessages;
+var create, crypto, db, err, getPage, newMessage, getMessages;
 
 db = require("./databaseconnect");
-
 err = require("./errorHandler");
-
 crypto = require("crypto");
 
 /*
@@ -20,10 +17,10 @@ db.initializeDB(null, err.handle);
 Create a new mosaic from the basic data
 */
 create = function(mosaicData, user, callback) {
-  var email;
+  var email = mosaicData.target.emails[0].value;
   mosaicData.owner = user;
-  mosaicData.key = crypto.randomBytes(20).toString("hex");
-  email = mosaicData.target.emails[0].value;
+  mosaicData.key = generateKey();
+
   db.getUserByEmail(email , function(success, results) {
     if (results && !results.error) {
       if (results.length) {
@@ -102,6 +99,13 @@ getMessages = function(data, callback) {
     }
   });
 };
+
+/**
+Creates a hash key to serve as a unique identifier for the mosaic
+**/
+function generateKey() {
+  return crypto.randomBytes(20).toString("hex");
+}
 
 /*
 export the functions

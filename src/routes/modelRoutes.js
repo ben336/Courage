@@ -2,11 +2,17 @@
 var mosaic = require("../mosaic");
 var security = require("../util/security");
 
+/**
+## Model Routes
+
+These are the routes related to the model concepts. They're mostly ajax routes
+to return json data after making a call to the db.
+**/
 function addModelRoutes(app) {
   /*
   Mosaic Page route
   */
-  app.get("/mosaicpage/:key", function(req, res) {
+  app.get("/mosaicpage/:key/", function(req, res) {
     mosaic.getPage(req.params.key, req, res);
   });
 
@@ -31,7 +37,7 @@ function addModelRoutes(app) {
   /*
   new message route
   */
-  app.post("/newmessage", ensureAuthenticated, function(req, res) {
+  app.post("/newmessage", security.ensureAuthenticated, function(req, res) {
     mosaic.newMessage(req.body, req.user, function(err) {
       res.send(err);
     });
