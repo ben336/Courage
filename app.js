@@ -36,8 +36,6 @@ app.configure(function() {
   app.use(express.static(__dirname + "/public"));
 });
 
-
-
 /* Add the routes */
 modelRoutes.addModelRoutes(app);
 authRoutes.addAuthRoutes(app,passport);
