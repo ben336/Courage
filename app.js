@@ -3,27 +3,16 @@
 This is the main class for handling incoming requests, using express to
 route them appropriately
 */
-var app, ensureAuthenticated, express, mosaic, passport, passportconfig;
+var app, passport, express,modelRoutes,authRoutes,pageRoutes;
 
 express = require("express");
 
-passportconfig = require("./src/passportconfig");
-
-mosaic = require("./src/mosaic");
-
-passport = passportconfig.configuredpassport;
+modelRoutes = require("./src/routes/modelRoutes");
+authRoutes = require("./src/routes/authRoutes");
+pageRoutes = require("./src/routes/pageRoutes");
+passport = require("./src/passportconfig").configuredpassport;
 
 app = express.createServer();
-
-/*
-Simple route middleware to ensure user is authenticated.
-*/
-ensureAuthenticated = function(req, res, next) {
-  if ( req.isAuthenticated() ) {
-    return next();
-  }
-  res.redirect("/login");
-};
 
 /*
 Configure Express
@@ -47,82 +36,12 @@ app.configure(function() {
   app.use(express.static(__dirname + "/public"));
 });
 
-/*
-root route
-*/
-app.get("/", function(req, res) {
-  res.render("index", {
-    user: req.user
-  });
-});
 
-/*
-account route
-*/
-app.get("/account", ensureAuthenticated, function(req, res) {
-  res.render("account", {
-    user: req.user
-  });
-});
 
-/*
-Mosaic Page route
-*/
-app.get("/mosaicpage/:key", function(req, res) {
-  mosaic.getPage(req.params.key, req, res);
-});
+/* Add the routes */
+modelRoutes.addModelRoutes(app);
+authRoutes.addAuthRoutes(app,passport);
+pageRoutes.addPageRoutes(app);
 
-/*
-new mosaic route
-*/
-app.get("/mosaic", ensureAuthenticated, function(req, res) {
-  res.render("mosaic", {
-    user: req.user
-  });
-});
-
-/*
-create mosaic route
-*/
-app.post("/createmosaic", ensureAuthenticated, function(req, res) {
-  mosaic.create(req.body, req.user, function(mosaicData) {
-    res.send(mosaicData);
-  });
-});
-
-/*
-login route
-*/
-app.get("/login", function(req, res) {
-  res.render("login", {
-    user: req.user
-  });
-});
-
-/*
-google authentication
-*/
-app.get("/auth/google", passport.authenticate("google", {
-  failureRedirect: "/login"
-}), function(req, res) {
-  res.redirect("/");
-});
-
-/*
-google authentication 2 (this may not be necessary)
-*/
-app.get("/auth/google/return", passport.authenticate("google", {
-  failureRedirect: "/login"
-}), function(req, res) {
-  res.redirect("/");
-});
-
-/*
-logout route
-*/
-app.get("/logout", function(req, res) {
-  req.logout();
-  res.redirect("/");
-});
 
 app.listen(3000);
