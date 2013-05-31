@@ -17,42 +17,33 @@ db.initializeDB(null, err.handle);
 Create a new mosaic from the basic data
 */
 create = function(mosaicData, user, callback) {
-  var email = mosaicData.target.emails[0].value;
+  var email;
+  email = mosaicData.target.emails[0].value;
   mosaicData.owner = user;
   mosaicData.key = generateKey();
 
-  db.getUserByEmail(email , function(success, results) {
-    if (results && !results.error) {
-      if (results.length) {
-        mosaicData.target = results[0];
-        db.addMosaicToDB(mosaicData, callback);
-      } else {
-        db.addUserToDB(mosaicData.target, function(success, results) {
-          if (results && !results.error && results.length) {
-            mosaicData.target = results[0];
-            db.addMosaicToDB(mosaicData, function(success, results) {
-              if (results && !results.error) {
-                callback(results[0]);
-              } else {
-                err.handle("Something went wrong creating a mosaic");
-              }
-            });
-          } else {
-            err.handle("Something went wrong creating a new user");
-          }
-        });
-      }
-    } else {
-      err.handle("something went wrong getting a user for a new mosaic");
-    }
+  //get the user and then create the mosaic with it
+  db.getUserOrCreate(mosaicData.target,createMosaic, function() {
+    err.handle("something went wrong getting a user for a new mosaic");
   });
+
+  // function to create mosaic
+  function createMosaic(user) {
+    mosaicData.target = user;
+    var passMosaicToCallback = function(results) {
+      callback(results[0]);
+    };
+    db.addMosaicToDB(mosaicData, passMosaicToCallback, function(){
+      err.handle("Something went wrong creating a mosaic");
+    });
+  }
 };
 
 /*
 Get the information for the current mosaic, then render the page
 */
 getPage = function(key, req, res) {
-  db.getMosaicByKey(key, function(success, results) {
+  db.getMosaicByKey(key, function(results) {
     var gotData, mosaicData;
     gotData = results && !results.error && results.length;
     mosaicData = gotData ? results[0] : {};
@@ -60,6 +51,9 @@ getPage = function(key, req, res) {
       user: req.user,
       mosaic: mosaicData
     });
+  },
+  function() {
+    err.handle("Something went wrong looking up the mosaic");
   });
 };
 
@@ -69,15 +63,11 @@ Create a new message
 
 newMessage = function(messageData,user,callback){
   messageData.writer = user;
-  db.addMessageToDB(messageData,function(success,results){
-    if(success) {
-      callback(true);
-    }
-    else
-    {
-      err.handle("Problem adding message to db" + results.error);
-      callback(false);
-    }
+  db.addMessageToDB(messageData,function(){
+    callback(true);
+  },function() {
+    err.handle("Problem adding message to db");
+    callback(false);
   });
 };
 
@@ -85,18 +75,15 @@ newMessage = function(messageData,user,callback){
 Get a list of the messages for the mosaic
 **/
 getMessages = function(data, callback) {
-  db.getMessagesForMosaicKey(data.key,function(success,results){
-    if(success) {
-      callback({
-        messages:results
-      });
-    }
-    else {
-      err.handle("Can't get messages for Key");
-      callback({
-        messages: []
-      });
-    }
+  db.getMessagesForMosaicKey(data.key,function(results){
+    callback({
+      messages:results
+    });
+  }, function(){
+    err.handle("Can't get messages for Key");
+    callback({
+      messages: []
+    });
   });
 };
 

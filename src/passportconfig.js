@@ -22,17 +22,16 @@ passport.serializeUser = function(user, done) {
 };
 
 passport.deserializeUser = function(id, done) {
-  var handleResult;
-  handleResult = function(success, results) {
+  var handleResult,handleError;
+  handleResult = function(results) {
     var user;
     user = results[0];
-    if (success) {
-      done(null, user);
-    } else {
-      err.handle(user);
-    }
+    done(null, user);
   };
-  db.getUserByID(id, handleResult);
+  handleError = function(){
+    err.handle("Couldn't deserialize User, error in the DB");
+  };
+  db.getUserByID(id, handleResult,handleError);
 };
 
 /*
@@ -57,22 +56,20 @@ googlehandle = function(id, profile, done) {
     if the user is available, an empty array if not found,
     and an error message if there is a problem
     */
-    db.getUserByID(id, function(success, results) {
+    db.getUserByID(id, function(results) {
       var user;
       user = results[0];
-      if (success && user) {
+      if (user) {
         done(null, user);
-      } else if (results && results.error) {
-        err.handle(results);
-      } else {
-        db.addUserToDB(profile, function(success, results) {
-          if (success) {
-            done(null, results[0]);
-          } else {
-            err.handle(results);
-          }
+      }  else {
+        db.addUserToDB(profile, function(results) {
+          done(null, results[0]);
+        },function(){
+          err.handle(results);
         });
       }
+    },function(){
+      err.handle("Problem getting user from DB");
     });
   });
 };
