@@ -17,8 +17,6 @@ db.initializeDB(null, err.handle);
 Create a new mosaic from the basic data
 */
 create = function(mosaicData, user, callback) {
-  var email;
-  email = mosaicData.target.emails[0].value;
   mosaicData.owner = user;
   mosaicData.key = generateKey();
 
@@ -28,14 +26,17 @@ create = function(mosaicData, user, callback) {
   });
 
   // function to create mosaic
-  function createMosaic(user) {
-    mosaicData.target = user;
-    var passMosaicToCallback = function(results) {
+  function createMosaic(targetuser) {
+
+    mosaicData.target = targetuser;
+    db.addMosaicToDB(mosaicData, function(results) {
+
       callback(results[0]);
-    };
-    db.addMosaicToDB(mosaicData, passMosaicToCallback, function(){
+    }, function() {
+
       err.handle("Something went wrong creating a mosaic");
     });
+
   }
 };
 

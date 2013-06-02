@@ -90,7 +90,7 @@ describe("DatabaseConnection", function() {
     var status, temp;
     status = null;
     runs(function() {
-      return db.initializeDB(dbconfig, function(err) {
+      db.initializeDB(dbconfig, function(err) {
         status = err ? ERROR : SUCCESS;
       });
     });
@@ -106,19 +106,17 @@ describe("DatabaseConnection", function() {
   /**
   Test whether it can manage users correctly
   **/
-  it("can insert a user record", function() {
+  it( "can insert a user record", function() {
     var mosaicsetup, record, temp, wasError;
     record = null;
     wasError = false;
     mosaicsetup = false;
     runs(function() {
-      return db.addUserToDB(USER, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.addUserToDB(USER, function(result) {
+        record = result[0];
+      } ,function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -132,31 +130,48 @@ describe("DatabaseConnection", function() {
       expect(record.firstname).toBe(USER.name.givenName);
       expect(record.email).toBe(USER.emails[0].value);
       MOSAIC.owner.id = record.id;
-      return db.addUserToDB(USER2, function(success, result) {
-        if (success && result) {
-          MOSAIC.target.id = result[0].id;
-          mosaicsetup = true;
-        }
+    });
+  });
+
+  it("can check if a record exists by email and add it if not", function() {
+    var mosaicsetup, record, temp, wasError;
+    record = null;
+    wasError = false;
+    mosaicsetup = false;
+    runs(function() {
+      db.getUserOrCreate(USER2, function(result) {
+        record = result;
+        MOSAIC.target.id = record.id;
+      } ,function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
-      return mosaicsetup;
+      return (record != null) || wasError;
     };
-    return waitsFor(temp, "Mosaic is set up", 500);
+    waitsFor(temp, "The insert was attempted", 500);
+    runs(function() {
+      expect(record).not.toBeFalsy();
+      expect(record.googleid).toBe(USER2.id);
+      expect(record.lastname).toBe(USER2.name.familyName);
+      expect(record.firstname).toBe(USER2.name.givenName);
+      expect(record.email).toBe(USER2.emails[0].value);
+    });
   });
+
+
 
   it("can read a user record using id", function() {
     var record, temp, wasError;
     record = null;
     wasError = false;
     runs(function() {
-      return db.getUserByID(USER.id, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result;
-        }
+      db.getUserByID(USER.id, function(result) {
+        record = result[0];
+      }, function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -178,13 +193,12 @@ describe("DatabaseConnection", function() {
     wasError = false;
     attempted = false;
     runs(function() {
-      return db.getUserByEmail(USER.emails[0].value, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result;
-        }
+      db.getUserByEmail(USER.emails[0].value, function(result) {
+        record = result[0];
+        attempted = true;
+      }, function(error) {
+        wasError = true;
+        record = error;
         attempted = true;
       });
     });
@@ -208,13 +222,12 @@ describe("DatabaseConnection", function() {
     record = null;
     wasError = false;
     runs(function() {
-      return db.addMosaicToDB(MOSAIC, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.addMosaicToDB(MOSAIC, function(result) {
+        record = result[0];
+      }, function(error){
+        wasError = true;
+        record = error;
+
       });
     });
     temp = function() {
@@ -235,13 +248,11 @@ describe("DatabaseConnection", function() {
     record = null;
     wasError = false;
     runs(function() {
-      return db.getMosaicByKey(MOSAIC.key, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.getMosaicByKey(MOSAIC.key, function(result) {
+        record = result[0];
+      } , function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -284,16 +295,15 @@ describe("DatabaseConnection", function() {
         },
         snippet: "this is another test"
       };
-      db.addMessageToDB(MESSAGE2, function(success, result) {
+      //don't bother with errors here
+      db.addMessageToDB(MESSAGE2, function(result) {
         MESSAGE2.id = result[0].id;
       });
-      return db.addMessageToDB(MESSAGE, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.addMessageToDB(MESSAGE, function(result) {
+        record = result[0];
+      } , function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -315,13 +325,11 @@ describe("DatabaseConnection", function() {
     record = null;
     wasError = false;
     runs(function() {
-      return db.getMessageByID(MESSAGE.id, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.getMessageByID(MESSAGE.id, function(result) {
+        record = result[0];
+      } , function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -343,14 +351,12 @@ describe("DatabaseConnection", function() {
     wasError = false;
     attempted = false;
     runs(function() {
-      return db.getMessagesForMosaicKey(MOSAIC.key, function(success, result) {
-        if (success) {
-          records = result;
-          attempted = true;
-        } else {
-          wasError = true;
-          records = result;
-        }
+      db.getMessagesForMosaicKey(MOSAIC.key, function(result) {
+        records = result;
+        attempted = true;
+      }, function(error) {
+        wasError = true;
+        records = error;
       });
     });
     temp = function() {
@@ -372,13 +378,11 @@ describe("DatabaseConnection", function() {
     wasError = false;
     runs(function() {
       db.removeMessageByID(MESSAGE2.id, function() {});
-      return db.removeMessageByID(MESSAGE.id, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.removeMessageByID(MESSAGE.id, function(result) {
+        record = result[0];
+      }, function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -399,13 +403,11 @@ describe("DatabaseConnection", function() {
     record = null;
     wasError = false;
     runs(function() {
-      return db.removeMosaicByKey(MOSAIC.key, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result[0];
-        }
+      db.removeMosaicByKey(MOSAIC.key, function(result) {
+        record = result[0];
+      }, function(error) {
+        wasError = true;
+        record = error;
       });
     });
     temp = function() {
@@ -427,15 +429,13 @@ describe("DatabaseConnection", function() {
     attempt = null;
     wasError = false;
     runs(function() {
-      db.removeUserByID(USER.id, function(success, result) {
-        if (success) {
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result;
-        }
+      db.removeUserByID(USER.id, function(result) {
+        record = result[0];
+      } , function(error) {
+        wasError = true;
+        record = error;
       });
-      return db.removeUserByID(USER2.id, function() {});
+      db.removeUserByID(USER2.id, function() {});
     });
     waitsFor(function() {
       return (record != null) || wasError;
@@ -447,14 +447,12 @@ describe("DatabaseConnection", function() {
       expect(record.firstname).toBe(USER.name.givenName);
       expect(record.email).toBe(USER.emails[0].value);
       record = null;
-      return db.getUserByID(USER.id, function(success, result) {
-        if (success) {
-          attempt = true;
-          record = result[0];
-        } else {
-          wasError = true;
-          record = result;
-        }
+      db.getUserByID(USER.id, function(result) {
+        attempt = true;
+        record = result[0];
+      }, function(error) {
+        wasError = true;
+        record = error;
       });
     });
     waitsFor(function() {
