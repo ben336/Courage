@@ -3,24 +3,21 @@ html
 	head
 		title Courage
 		//these should probably end up in the body eventually. Here for convenience
+		link(rel="stylesheet",href="/css/styles.css")
 		script(src="http://code.jquery.com/jquery-1.9.1.min.js")
 		script(src="/js/lib/knockout.js")
 		script(src="/js/lib/knockout-mapping.js")
 	body
-		- if (!user)
-			p
+		div(id="toolbar")
+			- if (!user)
+
 				a(href="/") Home
-				|
 				a(href="/login") Log In
-				|
-		- else
-			p
+			- else
+				p
 				a(href="/") Home
-				|
 				a(href="/account") Account
-				|
 				a(href="/mosaic") New Mosaic
-				|
 				a(href="/logout") Log Out
 		#content
 			block content

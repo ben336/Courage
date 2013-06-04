@@ -14,9 +14,9 @@
   };
   $.post("/getmessages",{key:mosaicKey}).done(function(messages) {
     var returnedMessages = messages.messages;
-    messageList = {
-      messages: ko.observableArray(returnedMessages)
-    };
+    messageList = ko.mapping.fromJS({
+      messages: returnedMessages
+    });
     ko.applyBindings(messageList,document.getElementById("messageList"));
   });
   /**
@@ -33,11 +33,13 @@
   button = $("#submitmessage");
   button.click(function() {
     $.post("/newmessage", ko.toJS(messageData)).done(handleNewMessage);
+    messageData.message("");
+    messageData.snippet("");
   });
 
   handleNewMessage = function(data) {
-    $.post("/getmessages", {key:mosaicKey}).done(function(messages) {
-      ko.mapping.fromJS(messages, messageList);
+    $.post("/getmessages", {key:mosaicKey}).done(function(returnedmessages) {
+      ko.mapping.fromJS(returnedmessages, messageList);
     });
     if(!data){
       console.log("Problem adding message");
