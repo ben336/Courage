@@ -1,9 +1,0 @@
-.couragelogo{margin-top:50px;background-color:#e74c3c;height:250px;width:250px;display:block;margin-left:auto;margin-right:auto;-webkit-border-radius:50%;border-radius:50%}
-div.couragelogo div{background:url("/images/flame200.png") repeat #ecf0f1;display:block;width:200px;height:200px;margin-top:30px;margin-left:auto;margin-right:auto;-webkit-border-radius:50%;border-radius:50%;position:relative;top:25px;((null)):0}
-#toolbar{position:fixed;top:0;left:0;display:block;background:#7f8c8d;height:30px;width:100%}
-#toolbar a{display:block;float:right;margin:0 5px 0 5px;height:30px;color:#ecf0f1;text-decoration:none;font:24px/30px Helvetica,Arial,sans-serif}
-#toolbar a:hover{color:#e74c3c}
-body{background-color:#ecf0f1;width:100%;margin-top:30px;display:block}
-h1{text-align:center;font:70px/85px Helvetica,Arial,sans-serif;color:#e74c3c}
-h2{text-align:center;font:40px/55px Helvetica,Arial,sans-serif;color:#7f8c8d}
-.welcometext{display:block;overflow:hidden;width:450px;margin-left:auto;margin-right:auto;color:#34495e;font:20px/27px Helvetica,Arial,sans-serif}
