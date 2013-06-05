@@ -2,7 +2,12 @@ extend layout
 
 block content
 
-	- if (!user) 
-		h2 Welcome! Please log in :)
-	- else 
-		h2 Hello, #{user.firstname}. Thanks for trying out Courage.
+  div(class="couragelogo")
+    div
+  h1 Courage
+  h2 Community Encouragement
+  div(class="welcometext")
+    p.
+      Courage allows communities to come together and
+      encourage each other by creating mosaics filled
+      by their messages.

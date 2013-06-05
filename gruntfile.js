@@ -7,6 +7,7 @@ Unfortunately, it also doesn"t get along well with dox our documentation
 engine, because dox doesn"t handle comment like syntax in strings
 very well, and chokes on it.
 */
+
 module.exports = function(grunt) {
   grunt.initConfig({
     "jasmine-node": {
