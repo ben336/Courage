@@ -1,7 +1,6 @@
 extend layout
 
 block content
-
-	p ID: #{user.id} 
-	p Name: #{user.firstname + " "+user.lastname}
-	p Email: #{user.email}
+  div(class="accountpage")
+    h3(class="namefield") #{user.firstname + " "+user.lastname}
+    h4(class="emailfield") #{user.email}

@@ -11,6 +11,9 @@ db = require("./databaseconnect");
 
 err = require("./errorHandler");
 
+
+googleconfig = require("./config/passport").googleconfig;
+
 // initialize the database
 db.initializeDB(null, err.handle);
 
@@ -34,18 +37,12 @@ passport.deserializeUser = function(id, done) {
   db.getUserByID(id, handleResult,handleError);
 };
 
+
 /*
-Here we set up the Google strategy, with a config object and then a
+Here we set up the Google strategy with a
 handle function to take the profile information and store it in the db if
 necessary before returning a db record to represent the user
-
-this should probably be split out somewhere
 */
-googleconfig = {
-  returnURL: "http://localhost:3000/auth/google/return",
-  realm: "http://localhost:3000/"
-};
-
 googlehandle = function(id, profile, done) {
   /* asynchronous verification*/
   process.nextTick(function() {

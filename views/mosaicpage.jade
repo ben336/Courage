@@ -1,24 +1,28 @@
 extend layout
 
 block content
+  div(id="mosaicPage")
+    - if (!mosaic)
+      h2 No Mosaic Found
+    - else
+      div(class="sidebar")
+        h4 #{mosaic.name}
+        p #{mosaic.description}
+      div(id="messageform")
+        h3 Create new Message
+        div
+          label Snippet
+          input(data-bind ="value:snippet")
+        div
+          label Message
+          textarea(rows = "4", cols = "50",id = "newmessage", data-bind = "value:message")
+        div
+          a(href="#",id="submitmessage") Submit
 
-  - if (!mosaic)
-    h2 No Mosaic Found
-  - else
-    h2 Mosaic #{mosaic.name}
-    p #{mosaic.description}
-    div(id="messageform")
-      h3 Create new Message
-      p Snippet
-      input(data-bind ="value:snippet")
-      p Message
-      textarea(rows = "4", cols = "50",id = "newmessage", data-bind = "value:message")
-      a(href="#",id="submitmessage") Submit Message
-
-    div(id="messageList", data-bind="foreach:messages")
-      p Snippet
-      span(data-bind ="text:snippet")
-      p Message
-      p(data-bind = "text:message")
+      div(id="messageList", data-bind="foreach:messages")
+        p Snippet
+        span(data-bind ="text:snippet")
+        p Message
+        p(data-bind = "text:message")
 
   script(src="/js/mosaicPage.js")
