@@ -1,13 +1,12 @@
 extend layout
 
 block content
-  div(id="mosaicPage")
+  div(id="mosaicpage")
     - if (!mosaic)
       h2 No Mosaic Found
     - else
-      div(class="sidebar")
-        h4 #{mosaic.name}
-        p #{mosaic.description}
+      h2 #{mosaic.name}
+      p(class="description") #{mosaic.description}
       a(id="newmessagebutton",href="#") New Message
 
       div(id="messageList", data-bind="foreach:messages")

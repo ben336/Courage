@@ -11,14 +11,14 @@ html
 		div(id="toolbar")
 			- if (!user)
 
-				a(href="/", class="home")
+				a(href="/", class="home") Courage
 				a(href="/login") Log In
 			- else
 
 				a(href="/logout") Log Out
 				a(href="/account") Account
 				a(href="#",id="newmosaic") New Mosaic
-				a(href="/",class="home")
+				a(href="/",class="home") Courage
 		#content
 			block content
 		script(src="/js/newMosaic.js")
