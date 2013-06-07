@@ -25,7 +25,7 @@ app.configure( function() {
   app.set("view options", {
     layout: false
   });
-  app.use(express.logger());
+  //app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());

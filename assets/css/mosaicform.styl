@@ -1,11 +1,37 @@
+#mosaicdialog
+  background-color:$overlay
+  width:100%
+  height:100%
+  z-index:100
+  display:block;
+  position:absolute;
+  top:0
+  left: 0
+
+
+
 #mosaicform
   center:0
   width:600px
   background-color:$red
   margin-top:100px
-  padding:20px
+  padding: 0px 0px 20px 10px
   display:block
   overflow:hidden;
+
+a.closebutton
+  display:block
+  width:30px
+  height:30px
+  background-color:$darkblue
+  float:right
+  font: 25px/30px $helv
+  text-align:center
+  color:$white
+  cursor:pointer
+
+a.closebutton:active
+  background-color:$black
 
 #mosaicform h3
   text-align:center
@@ -31,9 +57,12 @@
   float:left
   border-radius:5px
   background-color:$white
-  font: $bodytext
-  color:black
+  bodytext: 0
+  color:$black
   width:400px
+
+#mosaicform input
+  height: 24px
 
 /* Individual form sizes */
 

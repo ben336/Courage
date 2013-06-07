@@ -17,10 +17,19 @@ function addModelRoutes(app) {
   });
 
   /*
-  new mosaic route
+  New mosaic Dialog route
   */
   app.get("/mosaic", security.ensureAuthenticated, function(req, res) {
     res.render("mosaic", {
+      user: req.user
+    });
+  });
+
+  /*
+  Create message Dialog route
+  */
+  app.get("/newmessage", security.ensureAuthenticated, function(req, res) {
+    res.render("messagedialog", {
       user: req.user
     });
   });

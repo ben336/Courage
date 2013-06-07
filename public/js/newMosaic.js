@@ -1,6 +1,8 @@
 (function() {
 
-  var button, handleNewMosaic, mosaicData;
+  var button, handleNewMosaic, mosaicData,closebutton;
+
+
 
   /**
   ### Creating a new Mosaic
@@ -22,21 +24,33 @@
       emails: [{value:ko.observable()}]
     }
   };
-  /**
-  After we create the object, we bind it to the form div, to set up the knockout
-  2-way binding.
-  **/
-  ko.applyBindings(mosaicData,document.getElementById("mosaicform"));
 
 
-  /**
-  Finally we set the button to send the data to the server and create the new
-  mosaic
-  **/
-  button = $("#newmosaicbutton");
-  button.click(function() {
-    $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
+  $("#newmosaic").click(function(){
+    var dialog = $("<div id='mosaicdialog'></div>");
+    dialog.load("/mosaic/ #mosaicform",function(){
+      /**
+      After we load the template, we bind it to the form div, to set up the
+      knockout 2-way binding and add it to the DOM
+      **/
+      ko.applyBindings(mosaicData,dialog[0]);
+      $("body").append(dialog);
+      /**
+      Finally we set the button to send the data to the server and create the
+      new mosaic
+      **/
+      button = $("#newmosaicbutton");
+      button.click(function() {
+        $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
+      });
+      closebutton= $("#mosaicdialog .closebutton");
+      closebutton.click(function(){
+        dialog.remove();
+      });
+    });
   });
+
+
 
   handleNewMosaic = function(data) {
     var message;

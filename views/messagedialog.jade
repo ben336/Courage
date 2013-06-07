@@ -1,0 +1,11 @@
+div(id="messageform")
+  a(class="closebutton") x
+  h3 Create new Message
+  div
+    label Snippet
+    input(data-bind ="value:snippet")
+  div
+    label Message
+    textarea(rows = "4", cols = "50",id = "newmessage", data-bind = "value:message")
+  div
+    a(href="#",id="submitmessage") Submit
