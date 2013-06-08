@@ -10,9 +10,8 @@ block content
       a(id="newmessagebutton",href="#") New Message
 
       div(id="messageList", data-bind="foreach:messages")
-        p Snippet
-        span(data-bind ="text:snippet")
-        p Message
-        p(data-bind = "text:message")
+        div(class="message")
+          span(class="snippet",data-bind ="text:snippet")
+          span(class="writername", data-bind = "text:firstname()+' '+lastname()")
 
   script(src="/js/mosaicPage.js")

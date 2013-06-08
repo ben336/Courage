@@ -3,6 +3,21 @@
 #mosaicpage h2
   color:$red
 
+#newmessagebutton
+  display:block;
+  background-color:$darkblue
+  color:$white
+  text-decoration:none
+  height:30px
+  width:150px
+  fixed: top 40px right 20px
+  text-align:center
+  font: 20px/30px $helv
+  cursor:pointer
+
+#newmessagebutton:hover
+  background-color:$black
+
 #mosaicpage p.description
   bodytext :0
   display:block;
@@ -19,6 +34,32 @@
   position:absolute;
   top:0
   left: 0
+
+
+#messageList
+  width:400px
+  display:block
+  float:left;
+  color:$black
+  bodytext:0
+
+#messageList .message
+  display:block;
+  height:90px;
+  background-color:$red
+  margin-bottom:20px
+  float:left
+
+
+#messageList .message span
+  display:block;
+  float:left;
+  margin: 10px
+
+#messageList span.snippet
+  width:250px;
+#messageList span.writername
+  width:100px;
 
 
 #messageform
