@@ -34,12 +34,12 @@ USER = {
 USER2 = {
   id: "testID2" + Math.floor(Math.random() * 100),
   name: {
-    givenName: "John",
-    familyName: "Doe"
+    givenName: "Jane",
+    familyName: "Doherty"
   },
   emails: [
     {
-      value: "johndoe2@gmail.com"
+      value: "janedoherty@gmail.com"
     }
   ]
 };
@@ -339,8 +339,9 @@ describe("DatabaseConnection", function() {
     runs(function() {
       expect(record).not.toBeFalsy();
       expect(record.message).toBe(MESSAGE.message);
-      expect(record.mosaic).toBe(MESSAGE.mosaic.key);
-      expect(record.writer).toBe(MESSAGE.writer.id);
+      expect(record.mosaicid).toBe(MESSAGE.mosaic.key);
+      expect(record.firstname).toBe(USER2.name.givenName);
+      expect(record.lastname).toBe(USER2.name.familyName);
       expect(record.snippet).toBe(MESSAGE.snippet);
     });
   });

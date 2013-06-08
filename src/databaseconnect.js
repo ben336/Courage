@@ -184,7 +184,7 @@ addMessageToDB = function(message, success, error) {
 */
 getMessageByID = function(id, success, error) {
   var exec, query;
-  query = "SELECT * FROM message where id = $1";
+  query = "SELECT * FROM message_view where id = $1";
   exec = client.query(query, [id]);
   addQueryEvents(exec, success, error);
 };
@@ -194,7 +194,7 @@ getMessageByID = function(id, success, error) {
 */
 getMessagesForMosaicKey = function(key, success, error) {
   var exec, query;
-  query = "SELECT * FROM message where mosaic = $1";
+  query = "SELECT * FROM message_view where mosaicid = $1";
   exec = client.query(query, [key]);
   addQueryEvents(exec, success, error);
 };
