@@ -1,4 +1,5 @@
 DROP VIEW MOSAIC_VIEW;
+DROP VIEW MESSAGE_VIEW;
 DROP TABLE PEOPLE;
 DROP TABLE MOSAIC;
 DROP TABLE MESSAGE;
@@ -66,7 +67,7 @@ CREATE TABLE MESSAGE(
 		1 - public
 		with room to expand
 	*/
-	VISIBLITY INT2
+	VISIBILITY INT2
 );
 
 CREATE OR REPLACE VIEW MOSAIC_VIEW AS
@@ -90,6 +91,23 @@ where
 	mosaic.owner = owner.id
 	and
 	mosaic.target = target.id;
+
+CREATE OR REPLACE VIEW Message_VIEW AS
+select
+	message.id,
+	message.mosaic as mosaicid,
+	message.message,
+	message.snippet,
+	message.WRITEDATE,
+	message.visibility,
+	writer.firstname,
+	writer.lastname
+from
+	message,
+	people as writer
+where
+	message.writer = writer.id
+
 
 
 
