@@ -20,7 +20,7 @@ function addModelRoutes(app) {
   New mosaic Dialog route
   */
   app.get("/mosaic", security.ensureAuthenticated, function(req, res) {
-    res.render("mosaic", {
+    res.render("dialogs/mosaicdialog", {
       user: req.user
     });
   });
@@ -29,7 +29,7 @@ function addModelRoutes(app) {
   Create message Dialog route
   */
   app.get("/newmessage", security.ensureAuthenticated, function(req, res) {
-    res.render("messagedialog", {
+    res.render("dialogs/messagedialog", {
       user: req.user
     });
   });
