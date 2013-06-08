@@ -19,7 +19,7 @@
   margin: 20px
 
 #messageList
-  width:400px
+  width:700px
   display:block
   float:left;
   color:$black
@@ -27,22 +27,31 @@
 
 #messageList .message
   display:block;
-  height:90px;
+  height:180px;
+  width:180px
   background-color:$red
-  margin-bottom:20px
+  margin:0 0 20px 30px
   float:left
+  overflow:hidden
 
 
 #messageList .message span
   display:block;
+  text-wrap: normal
   float:left;
-  margin: 10px
+  width:160px;
 
 #messageList span.snippet
-  width:250px;
-#messageList span.writername
-  width:100px;
+  height:130px
+  margin:10px
 
+#messageList span.writername
+  height:30px
+  background-color: $lightoverlay
+  color:$white
+  text-align:center
+  line-height:30px
+  padding:0 10px 0 10px
 
 #messagedialog
   dialog :0

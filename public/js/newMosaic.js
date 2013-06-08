@@ -1,6 +1,6 @@
 (function() {
 
-  var button, mosaicData,closebutton;
+  var mosaicData;
 
   /**
   ## Data
@@ -49,26 +49,28 @@
     Sets up the dialog that the function is being called on
   **/
   function setUpMosaicDialog() {
-      /**
-      After we load the template, we bind it to the form div, to set up the
-      knockout 2-way binding and add it to the DOM
-      **/
-      var dialog = this.dialog;
-      ko.applyBindings(mosaicData,dialog[0]);
-      $("body").append(dialog);
-      /**
-      Finally we set the button to send the data to the server and create the
-      new mosaic
-      **/
-      $ ("#newmosaicbutton").click(createNewMosaic);
-      $ ("#mosaicdialog .closebutton").click(function(){dialog.remove();});
+    /**
+    After we load the template, we bind it to the form div, to set up the
+    knockout 2-way binding and add it to the DOM
+    **/
+    var dialog = this.dialog;
+    ko.applyBindings(mosaicData,dialog[0]);
+    $("body").append(dialog);
+    /**
+    Finally we set the button to send the data to the server and create the
+    new mosaic
+    **/
+    $ ("#newmosaicbutton").click(createNewMosaic);
+    $ ("#mosaicdialog .closebutton").click(function() {
+      dialog.remove();
+    });
   }
 
   /**
-    Create a new mosaic based on the knockout data
+  Create a new mosaic based on the knockout data
   **/
   function createNewMosaic() {
-      $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
+    $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
   }
 
   /**

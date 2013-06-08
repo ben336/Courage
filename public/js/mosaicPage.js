@@ -63,7 +63,8 @@ of the page.
     Creates a new message based on input from the
     dialog box
   **/
-  function createNewMessage(dialog){
+  function createNewMessage(){
+    var dialog = this.dialog;
     $.post("/newmessage", ko.toJS(messageData)).done(handleNewMessage);
     messageData.message("");
     messageData.snippet("");
@@ -74,7 +75,7 @@ of the page.
     Sets up the buttons to create a message and close the dialog
   **/
   function initMessageDialogButtons(dialog) {
-    $ ("#submitmessage").click( createNewMessage );
+    $ ("#submitmessage").click( createNewMessage.bind({dialog:dialog}) );
     $ (".closebutton").click( function(){ dialog.remove();} );
   }
 
@@ -86,7 +87,7 @@ of the page.
     if(!success){
       console.log("Problem adding message");
     }
-  };
+  }
 
   /**
     Bind a new set of messages to the DOM with knockout
