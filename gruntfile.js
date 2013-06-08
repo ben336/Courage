@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     stylus: {
       compile: {
         options: {
-          paths: ["assets/css/**/*.styl"],
+          paths: ["assets/css/**/*.styl","assets/css/mixins/*.styl"],
           // use embedurl("test.png") in our code to trigger Data URI embedding
           urlfunc: "embedurl"
           /*use: [

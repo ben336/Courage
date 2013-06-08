@@ -1,8 +1,10 @@
 (function() {
 
-  var button, handleNewMosaic, mosaicData,closebutton;
+  var button, mosaicData,closebutton;
 
-
+  /**
+  ## Data
+  **/
 
   /**
   ### Creating a new Mosaic
@@ -25,42 +27,62 @@
     }
   };
 
+  /**
+  ## Initial Setup
+  **/
 
-  $("#newmosaic").click(function(){
+  $("#newmosaic").click(openMosaicDialog);
+
+  /**
+  ## Helper functions
+  **/
+
+
+  function openMosaicDialog() {
     var dialog = $("<div id='mosaicdialog'></div>");
-    dialog.load("/mosaic/ #mosaicform",function(){
+    dialog.load("/mosaic/ #mosaicform",setUpMosaicDialog.bind({
+      dialog:dialog
+    }));
+  }
+
+  /**
+    Sets up the dialog that the function is being called on
+  **/
+  function setUpMosaicDialog() {
       /**
       After we load the template, we bind it to the form div, to set up the
       knockout 2-way binding and add it to the DOM
       **/
+      var dialog = this.dialog;
       ko.applyBindings(mosaicData,dialog[0]);
       $("body").append(dialog);
       /**
       Finally we set the button to send the data to the server and create the
       new mosaic
       **/
-      button = $("#newmosaicbutton");
-      button.click(function() {
-        $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
-      });
-      closebutton= $("#mosaicdialog .closebutton");
-      closebutton.click(function(){
-        dialog.remove();
-      });
-    });
-  });
+      $ ("#newmosaicbutton").click(createNewMosaic);
+      $ ("#mosaicdialog .closebutton").click(function(){dialog.remove();});
+  }
 
+  /**
+    Create a new mosaic based on the knockout data
+  **/
+  function createNewMosaic() {
+      $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
+  }
 
-
-  handleNewMosaic = function(data) {
+  /**
+    Process the new mosaic after its been passed to the server
+  **/
+  function handleNewMosaic (data) {
     var message;
-    if(data && data.key){
+    if (data && data.key) {
       document.location.href = "/mosaicpage/"+data.key+"/";
     }
-    else{
+    else {
       message = "Failed to create mosaic" + mosaicData.name;
       $("#message").html(message);
     }
-  };
+  }
 
 }).call(this);

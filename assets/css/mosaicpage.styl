@@ -4,18 +4,11 @@
   color:$red
 
 #newmessagebutton
-  display:block;
-  background-color:$darkblue
-  color:$white
-  text-decoration:none
-  height:30px
+  defaultbutton 0
   width:150px
   fixed: top 40px right 20px
-  text-align:center
-  font: 20px/30px $helv
-  cursor:pointer
 
-#newmessagebutton:hover
+#newmessagebutton:active
   background-color:$black
 
 #mosaicpage p.description
@@ -24,17 +17,6 @@
   width:300px;
   float:left
   margin: 20px
-
-#messagedialog
-  background-color:$overlay
-  width:100%
-  height:100%
-  z-index:100
-  display:block;
-  position:absolute;
-  top:0
-  left: 0
-
 
 #messageList
   width:400px
@@ -62,13 +44,13 @@
   width:100px;
 
 
+#messagedialog
+  dialog :0
+
 #messageform
-  width:600px
-  background-color:$red
-  margin-top:100px
-  padding: 0px 0px 20px 10px
-  overflow:hidden
-  center:0
+  dialogform :0
+
+
 
 #messageform h3
   text-align:center
@@ -83,30 +65,21 @@
   margin: 10px 0 0 0
 
 #messageform label
-  font: 20px/25px $helv
-  margin-right:20px
-  width:150px
-  display:block
-  float:left
+  dialogLabel 0
 
 #messageform input,textarea
-  display:block
-  float:left
-  border-radius:5px
-  background-color:$white
-  font: $bodytext
-  color:black
-  width:400px
+  dialogInput 0
 
 #messageform #submitmessage
+  defaultbutton 0
   center:0
-  background-color:$darkblue
   width:200px
-  color:$white
-  text-decoration:none
-  height:50px
-  text-align:center
-  font: 20px/50px $helv
 
 #messageform #submitmessage:active
-  background-color:$black
+  activedefaultbutton
+
+#messageform .closebutton
+  dialogCloseButton 0
+
+#messageform .closebutton:active
+  activeDialogCloseButton 0
