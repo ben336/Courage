@@ -35,6 +35,16 @@ function addModelRoutes(app) {
   });
 
   /*
+  View message Dialog route
+  */
+  app.get("/viewmessage", security.ensureAuthenticated, function(req, res) {
+    res.render("dialogs/displaymessagedialog", {
+      user: req.user
+    });
+  });
+
+
+  /*
   create mosaic route
   */
   app.post("/createmosaic", security.ensureAuthenticated, function(req, res) {

@@ -10,7 +10,7 @@ block content
       a(id="newmessagebutton",href="#") New Message
 
       div(id="messageList", data-bind="foreach:messages")
-        div(class="message")
+        div(class="message", data-bind="click:displayMessage")
           span(class="snippet",data-bind ="text:snippet")
           span(class="writername", data-bind = "text:firstname()+' '+lastname()")
 

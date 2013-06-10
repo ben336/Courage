@@ -96,4 +96,31 @@ of the page.
     ko.mapping.fromJS(returnedmessages, messageList);
   }
 
+  /**
+    Sets up the button to  close the dialog
+  **/
+  function initViewMessageDialogButtons(dialog) {
+    $ (".closebutton").click( function(){ dialog.remove();} );
+  }
+
+  /**
+  ## Global functions
+  **/
+
+
+  /**
+    Displays a message in a dialog box. This is set as a global so that
+    it can be bound to the click handler with knockout
+  **/
+  window.displayMessage = function (message) {
+      var dialog = $("<div id='viewmessagedialog'></div>");
+      dialog.load("/viewmessage/",function() {
+        //After we load the template, we bind it to the form div, to set up the
+        //knockout 2-way binding and add it to the DOM
+        $("body").append(dialog);
+        ko.applyBindings(message,dialog[0]);
+        initViewMessageDialogButtons(dialog);
+      });
+    };
+
 }).call(this);
