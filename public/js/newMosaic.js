@@ -15,18 +15,36 @@
   the target person, structured to match google's "person" data structure.
   Info about the owner and other metadata will be added on the server
   **/
-  mosaicData = {
-    name: ko.observable(),
-    description: ko.observable(),
-    target: {
-      name: {
-        givenName: ko.observable(),
-        familyName: ko.observable()
+  function Mosaic(){
+    var self = this;
+    self.name= ko.protectedObservable();
+    self.description= ko.protectedObservable();
+    self.target= {
+      name : {
+        givenName : ko.protectedObservable(),
+        familyName : ko.protectedObservable()
       },
-      emails: [{value:ko.observable()}]
-    }
-  };
+      emails: [{
+        value:ko.protectedObservable()
+      }]
+    };
+    self.commitAll = function() {
+      self.name.commit();
+      self.description.commit();
+      self.target.name.givenName.commit();
+      self.target.name.familyName.commit();
+      self.emails[0].value.commit();
+    };
+    self.resetAll = function() {
+      self.name.reset();
+      self.description.reset();
+      self.target.name.givenName.reset();
+      self.target.name.familyName.reset();
+      self.target.emails[0].value.reset();
+    };
 
+  }
+  mosaicData = new Mosaic();
   /**
   ## Initial Setup
   **/
@@ -62,6 +80,7 @@
     **/
     $ ("#newmosaicbutton").click(createNewMosaic);
     $ ("#mosaicdialog .closebutton").click(function() {
+      mosaicData.resetAll();
       dialog.remove();
     });
   }
@@ -70,6 +89,7 @@
   Create a new mosaic based on the knockout data
   **/
   function createNewMosaic() {
+    mosaicData.commitAll();
     $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
   }
 

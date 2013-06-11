@@ -14,14 +14,27 @@ of the page.
   urlParts = document.URL.split("/");
   mosaicKey = urlParts[urlParts.length - 2];
 
-  messageData = {
-    message: ko.observable(),
-    snippet: ko.observable(),
-    mosaic: {
+  function Message() {
+    var self = this;
+    self.message = ko.protectedObservable(),
+    self.snippet = ko.protectedObservable(),
+    self.mosaic = {
       key: mosaicKey
-    }
-  };
-
+    };
+    self.commitAll = function(){
+      self.message.commit();
+      self.snippet.commit();
+    };
+    self.resetAll = function(){
+      self.message.reset();
+      self.snippet.reset();
+    };
+    self.clearAll = function(){
+      self.message("");
+      self.snippet("");
+    };
+  }
+  messageData = new Message();
   /**
   ## Page Setup Logic
   **/
@@ -65,9 +78,9 @@ of the page.
   **/
   function createNewMessage(){
     var dialog = this.dialog;
+    messageData.commitAll();
     $.post("/newmessage", ko.toJS(messageData)).done(handleNewMessage);
-    messageData.message("");
-    messageData.snippet("");
+    messageData.clearAll();
     dialog.remove();
   }
 
@@ -76,7 +89,10 @@ of the page.
   **/
   function initMessageDialogButtons(dialog) {
     $ ("#submitmessage").click( createNewMessage.bind({dialog:dialog}) );
-    $ (".closebutton").click( function(){ dialog.remove();} );
+    $ (".closebutton").click( function(){
+        dialog.remove();
+        //messageData.resetAll();
+      });
   }
 
   /**
@@ -84,6 +100,8 @@ of the page.
   **/
   function handleNewMessage (success) {
     $.post("/getmessages", {key:mosaicKey}).done(bindNewMessages);
+
+    messageData.resetAll();
     if(!success){
       console.log("Problem adding message");
     }

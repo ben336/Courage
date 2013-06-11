@@ -5,13 +5,15 @@ block content
     - if (!mosaic)
       h2 No Mosaic Found
     - else
-      h2 #{mosaic.name}
-      p(class="description") #{mosaic.description}
-      a(id="newmessagebutton",href="#") New Message
+      div(class="sidebar")
+        h2 #{mosaic.name}
+        p(class="description") #{mosaic.description}
 
-      div(id="messageList", data-bind="foreach:messages")
+      div(id="messageList")
+        a(id="newmessagebutton",href="#") New Message
+        // ko foreach:messages
         div(class="message", data-bind="click:displayMessage")
           span(class="snippet",data-bind ="text:snippet")
           span(class="writername", data-bind = "text:firstname()+' '+lastname()")
-
+        // /ko
   script(src="/js/mosaicPage.js")

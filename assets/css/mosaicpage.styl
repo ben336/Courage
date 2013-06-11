@@ -1,12 +1,18 @@
-
+.sidebar
+  display:block;
+  width:300px;
+  float:left
 
 #mosaicpage h2
   color:$red
 
 #newmessagebutton
   defaultbutton 0
-  width:150px
-  fixed: top 40px right 20px
+  line-height:180px
+  width:180px;
+  height:180px;
+  float:left
+  margin:0 0 20px 30px
 
 #newmessagebutton:active
   background-color:$black
@@ -24,6 +30,7 @@
   float:left;
   color:$black
   bodytext:0
+  margin-top:40px
 
 #messageList .message
   display:block;
@@ -54,66 +61,7 @@
   line-height:30px
   padding:0 10px 0 10px
 
-#messagedialog
-  dialog :0
 
-#messageform
-  dialogform :0
-
-#viewmessagedialog
-  dialog :0
-
-#messagedisplaybox
-  dialogform :0
-  background-color:$darkblue
-  color:$lightgrey
-  font: 25px/30px $helv
-
-#messagedisplaybox div
-  text-align:justified
-  margin: 20px
-
-#messagedisplaybox .closebutton
-  background-color: $red
-
-/*
-#messagedisplaybox #snippetdisplay
-
-
-#messagedisplaybox #messagedisplay
-  text-align:justified
-  margin: 20px
-*/
-
-
-#messageform h3
-  text-align:center
-  font:30px/30px $helv
-  color:$black
-  display:block
-
-#messageform div
-  display:block
-  float:left
-  width:600px
-  margin: 10px 0 0 0
-
-#messageform label
-  dialogLabel 0
-
-#messageform input,textarea
-  dialogInput 0
-
-#messageform #submitmessage
-  defaultbutton 0
-  center:0
-  width:200px
-
-#messageform #submitmessage:active
-  activedefaultbutton
-
-#messageform .closebutton
-  dialogCloseButton 0
-
-#messageform .closebutton:active
-  activeDialogCloseButton 0
+/* import the dialog files */
+@import "dialogs/messageviewdialog"
+@import "dialogs/messagecreatedialog"
