@@ -17,23 +17,27 @@
   **/
   function Mosaic(){
     var self = this;
-    self.name= ko.protectedObservable();
-    self.description= ko.protectedObservable();
+    self.name= ko.revertibleObservable().extend({ required: true });
+    self.description= ko.revertibleObservable().extend({ required: true });
     self.target= {
       name : {
-        givenName : ko.protectedObservable(),
-        familyName : ko.protectedObservable()
+        givenName : ko.revertibleObservable().extend({ required: true }),
+        familyName : ko.revertibleObservable().extend({ required: true })
       },
       emails: [{
-        value:ko.protectedObservable()
+        value:ko.revertibleObservable().extend({
+          required: true,
+          email: true
+        })
       }]
     };
+    self.errorMessage = ko.observable();
     self.commitAll = function() {
       self.name.commit();
       self.description.commit();
       self.target.name.givenName.commit();
       self.target.name.familyName.commit();
-      self.emails[0].value.commit();
+      self.target.emails[0].value.commit();
     };
     self.resetAll = function() {
       self.name.reset();
@@ -43,11 +47,29 @@
       self.target.emails[0].value.reset();
     };
 
+    self.isValid = function() {
+      return self.name.isValid() &&
+      self.description.isValid() &&
+      self.target.name.givenName.isValid() &&
+      self.target.name.familyName.isValid() &&
+      self.target.emails[0].value.isValid();
+    };
+
   }
   mosaicData = new Mosaic();
   /**
   ## Initial Setup
   **/
+
+  ko.validation.configure({
+    decorateElement: true,
+    errorElementClass:"inputerror",
+    messagesOnModified: true,
+    insertMessages: false,
+    parseInputAttributes: true,
+    messageTemplate: null
+  });
+
 
   $("#newmosaic").click(openMosaicDialog);
 
@@ -89,8 +111,9 @@
   Create a new mosaic based on the knockout data
   **/
   function createNewMosaic() {
-    mosaicData.commitAll();
-    $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
+    if( mosaicData.isValid() ) {
+      $.post("/createmosaic", ko.toJS(mosaicData)).done(handleNewMosaic);
+    }
   }
 
   /**

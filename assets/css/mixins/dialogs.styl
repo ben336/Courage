@@ -28,8 +28,15 @@ dialogLabel()
 dialogInput()
   display:block
   float:left
-  border-radius:5px
+  border-radius:0px
   background-color:$white
   bodytext: 0
   color:$black
   width:400px
+  border: 0px
+  &.inputerror
+    background-color:$grey
+    color:$red
+  transition: all 0.1s ease-out;
+  &:focus
+    background-color:$lightgrey

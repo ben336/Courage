@@ -16,8 +16,14 @@ of the page.
 
   function Message() {
     var self = this;
-    self.message = ko.protectedObservable(),
-    self.snippet = ko.protectedObservable(),
+    self.message = ko.revertibleObservable().extend({
+        required: true,
+        minLength: 100
+      });
+    self.snippet = ko.revertibleObservable().extend({
+        required: true,
+        minLength: 15
+      });
     self.mosaic = {
       key: mosaicKey
     };
@@ -32,6 +38,10 @@ of the page.
     self.clearAll = function(){
       self.message("");
       self.snippet("");
+    };
+    self.isValid = function() {
+      return self.message.isValid() &&
+      self.snippet.isValid();
     };
   }
   messageData = new Message();
@@ -77,11 +87,12 @@ of the page.
     dialog box
   **/
   function createNewMessage(){
-    var dialog = this.dialog;
-    messageData.commitAll();
-    $.post("/newmessage", ko.toJS(messageData)).done(handleNewMessage);
-    messageData.clearAll();
-    dialog.remove();
+    if(messageData.isValid()){
+      var dialog = this.dialog;
+      $.post("/newmessage", ko.toJS(messageData)).done(handleNewMessage);
+      messageData.clearAll();
+      dialog.remove();
+    }
   }
 
   /**

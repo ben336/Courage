@@ -3,36 +3,25 @@
 **/
 
 
-//wrapper to an observable that requires accept/cancel
-ko.protectedObservable = function(initialValue) {
-  //private variables
-  var _actualValue = ko.observable(initialValue),
-    _tempValue = initialValue;
+ ko.revertibleObservable = function(initialValue) {
+    //private variables
+    var result = ko.observable(initialValue);
 
-  //computed observable that we will return
-  var result = ko.computed({
-    //always return the actual value
-    read: function() {
-      return _actualValue();
-    },
-    //stored in a temporary spot until commit
-    write: function(newValue) {
-      _tempValue = newValue;
-    }
-  });
+    result.forEditing = ko.observable(initialValue);
 
-  //if different, commit temp value
-  result.commit = function() {
-    if (_tempValue !== _actualValue()) {
-      _actualValue(_tempValue);
-    }
-  };
+    //if different, commit edit value
+    result.commit = function() {
+        var editValue = result.forEditing();
 
-  //force subscribers to take original
-  result.reset = function() {
-    _actualValue.valueHasMutated();
-    _tempValue = _actualValue();   //reset temp value
-  };
+        if (editValue !== result()) {
+            result(editValue);
+        }
+    };
 
-  return result;
+    //force subscribers to take original
+    result.reset = function() {
+        result.forEditing(result());
+    };
+
+    return result;
 };
