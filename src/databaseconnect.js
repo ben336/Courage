@@ -17,7 +17,7 @@ pg = require("pg");
 
 dbsettings = require("./config/dbsettings");
 
-dbconfig = dbsettings.config;
+dbconfig = dbsettings.config
 
 client = null;
 

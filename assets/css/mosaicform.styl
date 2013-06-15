@@ -13,14 +13,10 @@ a.closebutton:active
 #mosaicform h3
   text-align:center
   font:30px/30px $helv
-  color:$black
   display:block
 
 #mosaicform div
-  display:block
-  float:left
-  width:600px
-  margin: 10px 0 0 0
+  dialogEntry()
 
 #mosaicform label
   dialogLabel 0
@@ -36,25 +32,22 @@ a.closebutton:active
 
 #mosaicform .fname
   width:190px
-  margin-right: 16px
+  margin-right: 14px
 #mosaicform .lname
   width:190px
 
 /* Input button */
 
 #mosaicform #newmosaicbutton
+  defaultbutton()
   center:0
-  background-color:$darkblue
   width:200px
-  color:$white
-  text-decoration:none
-  height:50px
-  text-align:center
-  font: 20px/50px $helv
 
 #mosaicform #newmosaicbutton:active
   background-color:$black
 
+#mosaicform #newmosaicbutton
+  margin-top: 30px
 
 
 
